@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://enemies/SkeletonArcher.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/Skeleton Archer/Idle/0.png" id="2"]
+[ext_resource type="PackedScene" path="res://enemies/Projectile.tscn" id="3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(32, 64)
+
+[node name="SkeletonArcher" type="CharacterBody2D"]
+script = ExtResource("1")
+is_ranged = true
+attack_range = 520.0
+attack_cooldown = 1.4
+projectile_scene = ExtResource("3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+centered = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")

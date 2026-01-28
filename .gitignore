@@ -1,0 +1,25 @@
+# Godot
+.godot/
+.import/
+.export/
+
+# Web/General Build
+out/
+output/
+build/
+
+# IDE
+.vscode/
+.idea/
+.vs/
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temp
+*.tmp
+*.bak
+*~
