@@ -136,6 +136,10 @@ func _handle_e2e_shortcuts(event: InputEvent) -> bool:
 			_e2e_switch_section(true)
 		KEY_PAGEDOWN:
 			_e2e_switch_section(false)
+		KEY_HOME:
+			_e2e_load_section("section0_1")
+		KEY_END:
+			_e2e_load_section("section0_2")
 		KEY_1:
 			_teleport_to_debug_marker("DebugMarkerA")
 		KEY_2:
@@ -212,6 +216,19 @@ func _e2e_switch_section(next: bool) -> void:
 
 	main_node.call_deferred("switch_section", target_id)
 	print("[E2E] switch_section target=", target_id)
+
+
+func _e2e_load_section(section_id: String) -> void:
+	var main_node = get_tree().get_first_node_in_group("main")
+	if not main_node:
+		print("[E2E] load_section skipped (no Main)")
+		return
+	if not main_node.has_method("load_section"):
+		print("[E2E] load_section skipped (Main missing load_section)")
+		return
+
+	main_node.call_deferred("load_section", section_id)
+	print("[E2E] load_section target=", section_id)
 
 
 func _apply_e2e_step(delta: Vector2) -> void:

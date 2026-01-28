@@ -67,6 +67,8 @@ All E2E scaffolding uses **Ctrl+Alt+Shift** combos to avoid conflicts with playe
 - `F6`: Spawn magic test projectile (from right to left)
 - `PageUp`: Switch to next section (E2E debug)
 - `PageDown`: Restart from first section (E2E debug)
+- `Home`: Load test section `section0_1` (E2E debug)
+- `End`: Load test section `section0_2` (E2E debug)
 - `1`: Teleport to `DebugMarkerA`
 - `2`: Teleport to `DebugMarkerB`
 - `3`: Set `DebugMarkerA` to current position
@@ -79,6 +81,9 @@ All E2E scaffolding uses **Ctrl+Alt+Shift** combos to avoid conflicts with playe
 - `F11`: Teleport to respawn
 
 Markers `DebugMarkerA` and `DebugMarkerB` are placed in `section1_1.tscn` and `section1_2.tscn` for manual editing.
+Test sections live under `stages/stage0/`:
+- `section0_1`: Physical/melee + archer projectile E2E setup.
+- `section0_2`: Magic projectile + checkpoint activation E2E setup.
 
 ## Web E2E Verification (Chrome DevTools Only)
 

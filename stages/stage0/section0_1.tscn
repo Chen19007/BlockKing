@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://stages/stage1/Section.gd" id="1"]
+[ext_resource type="PackedScene" path="res://buildings/Checkpoint.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://enemies/Slime.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://enemies/Skeleton.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://enemies/SkeletonArcher.tscn" id="5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(1400, 40)
+
+[node name="section0_1" type="Node2D"]
+script = ExtResource("1")
+section_id = "section0_1"
+
+[node name="RespawnPoint" type="Node2D" parent="."]
+position = Vector2(100, 300)
+
+[node name="DebugMarkerA" type="Marker2D" parent="."]
+position = Vector2(220, 300)
+
+[node name="DebugMarkerB" type="Marker2D" parent="."]
+position = Vector2(900, 300)
+
+[node name="Checkpoint" parent="." instance=ExtResource("2")]
+position = Vector2(100, 300)
+
+[node name="Slime" parent="." instance=ExtResource("3")]
+position = Vector2(420, 340)
+
+[node name="Skeleton" parent="." instance=ExtResource("4")]
+position = Vector2(620, 336)
+
+[node name="SkeletonArcher" parent="." instance=ExtResource("5")]
+position = Vector2(860, 336)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(640, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("RectangleShape2D_1")
