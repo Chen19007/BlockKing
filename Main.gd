@@ -1,6 +1,6 @@
 extends Node
 
-const GameFlowConfig = preload("res://system/GameFlowConfig.gd")
+const GameFlowConfigClass = preload("res://system/GameFlowConfig.gd")
 
 var current_section: Node2D = null
 var current_section_id: String = ""
@@ -16,8 +16,8 @@ func _ready() -> void:
 	NodeReadyManager.register_node_ready_callback("Checkpoint", _on_checkpoint_ready)
 	NodeReadyManager.register_node_ready_callback("Player", _on_player_ready)
 
-	var first_stage = GameFlowConfig.get_first_stage_id()
-	var first_section = GameFlowConfig.get_first_section_id(first_stage)
+	var first_stage = GameFlowConfigClass.get_first_stage_id()
+	var first_section = GameFlowConfigClass.get_first_section_id(first_stage)
 	if first_section != "":
 		await load_section(first_section)
 	else:
@@ -53,7 +53,7 @@ func load_section(section_id: String) -> void:
 
 	NodeReadyManager.reset_all()
 	unload_section()
-	var scene_path = GameFlowConfig.get_section_path(section_id)
+	var scene_path = GameFlowConfigClass.get_section_path(section_id)
 	var packed_scene := load(scene_path) as PackedScene
 	if not packed_scene:
 		print("[Main] Failed to load section: ", scene_path)
@@ -72,8 +72,8 @@ func load_section(section_id: String) -> void:
 func switch_section(target_section_id: String) -> void:
 	if target_section_id == "":
 		print("[Main] Reached last section, restarting stage")
-		var first_stage = GameFlowConfig.get_first_stage_id()
-		var first_section = GameFlowConfig.get_first_section_id(first_stage)
+		var first_stage = GameFlowConfigClass.get_first_stage_id()
+		var first_section = GameFlowConfigClass.get_first_section_id(first_stage)
 		if first_section != "":
 			await load_section(first_section)
 		return

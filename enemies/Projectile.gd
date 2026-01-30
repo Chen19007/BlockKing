@@ -1,10 +1,10 @@
 extends Area2D
 
-const AttackType = preload("res://system/AttackType.gd")
+const AttackTypeClass = preload("res://system/AttackType.gd")
 
 @export var speed: float = 360.0
 @export var direction: Vector2 = Vector2.RIGHT
-@export var attack_type: int = AttackType.Type.PHYSICAL
+@export var attack_type: int = AttackTypeClass.Type.PHYSICAL
 @export var lifetime_sec: float = 4.0
 @export var is_reflectable: bool = true
 

@@ -2,8 +2,8 @@ class_name Player
 extends CharacterBody2D
 
 signal respawn_requested
-const AttackType = preload("res://system/AttackType.gd")
-const GameFlowConfig = preload("res://system/GameFlowConfig.gd")
+const AttackTypeClass = preload("res://system/AttackType.gd")
+const GameFlowConfigClass = preload("res://system/GameFlowConfig.gd")
 const ProjectileScene = preload("res://enemies/Projectile.tscn")
 
 @export var move_speed: float = 240.0
@@ -129,9 +129,9 @@ func _handle_e2e_shortcuts(event: InputEvent) -> bool:
 		KEY_F3:
 			_clear_debug_block_overrides()
 		KEY_F5:
-			_spawn_test_projectile(AttackType.Type.PHYSICAL)
+			_spawn_test_projectile(AttackTypeClass.Type.PHYSICAL)
 		KEY_F6:
-			_spawn_test_projectile(AttackType.Type.MAGIC)
+			_spawn_test_projectile(AttackTypeClass.Type.MAGIC)
 		KEY_PAGEUP:
 			_e2e_switch_section(true)
 		KEY_PAGEDOWN:
@@ -205,10 +205,10 @@ func _e2e_switch_section(next: bool) -> void:
 
 	var target_id := ""
 	if next:
-		target_id = GameFlowConfig.get_next_section_id(current_id)
+		target_id = GameFlowConfigClass.get_next_section_id(current_id)
 	else:
-		var first_stage = GameFlowConfig.get_first_stage_id()
-		target_id = GameFlowConfig.get_first_section_id(first_stage)
+		var first_stage = GameFlowConfigClass.get_first_stage_id()
+		target_id = GameFlowConfigClass.get_first_section_id(first_stage)
 
 	if not main_node.has_method("switch_section"):
 		print("[E2E] switch_section skipped (Main missing switch_section)")
@@ -302,9 +302,9 @@ func _teleport_to_respawn() -> void:
 
 
 func is_blocking_for_attack(attack_type: int) -> bool:
-	if attack_type == AttackType.Type.PHYSICAL:
+	if attack_type == AttackTypeClass.Type.PHYSICAL:
 		return is_blocking_physical
-	if attack_type == AttackType.Type.MAGIC:
+	if attack_type == AttackTypeClass.Type.MAGIC:
 		return is_blocking_magic
 	return false
 

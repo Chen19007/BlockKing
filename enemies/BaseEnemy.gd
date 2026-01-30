@@ -1,14 +1,14 @@
 class_name BaseEnemy
 extends CharacterBody2D
 
-const AttackType = preload("res://system/AttackType.gd")
+const AttackTypeClass = preload("res://system/AttackType.gd")
 
 @export var move_speed: float = 120.0
 @export var melee_range: float = 40.0
 @export var attack_range: float = 360.0
 @export var attack_cooldown: float = 1.2
 @export var is_ranged: bool = false
-@export var attack_type: int = AttackType.Type.PHYSICAL
+@export var attack_type: int = AttackTypeClass.Type.PHYSICAL
 @export var projectile_scene: PackedScene
 
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
