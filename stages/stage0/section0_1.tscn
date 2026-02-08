@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://bo5i0d8tcrpv7"]
 
-[ext_resource type="Script" path="res://stages/stage1/Section.gd" id="1"]
+[ext_resource type="Script" uid="uid://dgt2wljpuwn1i" path="res://stages/stage1/Section.gd" id="1"]
 [ext_resource type="PackedScene" path="res://buildings/Checkpoint.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://enemies/Slime.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://enemies/Skeleton.tscn" id="4"]
@@ -9,33 +9,33 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(1400, 40)
 
-[node name="section0_1" type="Node2D"]
+[node name="section0_1" type="Node2D" unique_id=314649585]
 script = ExtResource("1")
 section_id = "section0_1"
 
-[node name="RespawnPoint" type="Node2D" parent="."]
+[node name="RespawnPoint" type="Node2D" parent="." unique_id=2090050021]
 position = Vector2(100, 300)
 
-[node name="DebugMarkerA" type="Marker2D" parent="."]
+[node name="DebugMarkerA" type="Marker2D" parent="." unique_id=456561408]
 position = Vector2(220, 300)
 
-[node name="DebugMarkerB" type="Marker2D" parent="."]
+[node name="DebugMarkerB" type="Marker2D" parent="." unique_id=1364346775]
 position = Vector2(900, 300)
 
-[node name="Checkpoint" parent="." instance=ExtResource("2")]
+[node name="Checkpoint" parent="." unique_id=1708413260 instance=ExtResource("2")]
 position = Vector2(100, 300)
 
-[node name="Slime" parent="." instance=ExtResource("3")]
+[node name="Slime" parent="." unique_id=622295705 instance=ExtResource("3")]
 position = Vector2(420, 340)
 
-[node name="Skeleton" parent="." instance=ExtResource("4")]
+[node name="Skeleton" parent="." unique_id=1988841867 instance=ExtResource("4")]
 position = Vector2(620, 336)
 
-[node name="SkeletonArcher" parent="." instance=ExtResource("5")]
+[node name="SkeletonArcher" parent="." unique_id=578166516 instance=ExtResource("5")]
 position = Vector2(860, 336)
 
-[node name="Floor" type="StaticBody2D" parent="."]
+[node name="Floor" type="StaticBody2D" parent="." unique_id=1422082733]
 position = Vector2(640, 400)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1754515740]
 shape = SubResource("RectangleShape2D_1")

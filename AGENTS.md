@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 默认长期协作方式（无需用户重复提醒）
+
+- 每次对话默认按“长期计划协作”执行，不需要用户额外声明。
+- 长期计划主文档：`DEMO_RELEASE_PLAN.md`（周目标/里程碑/验收口径）。
+- 执行状态看板：`docs/integration_board.md`（`todo`/`in_review`/`ready`/`integrated`）。
+- 进度日志：`PROGRESS.md`（本周完成、阻塞项、下周待办）。
+
+### 默认执行规则
+
+1. 会话开始先对齐当前周目标与未完成项，再开始具体实现。
+2. 会话结束默认产出三项：本次完成、当前阻塞、下一步建议。
+3. 涉及素材接入时，按 `asset_id + 文件路径 + 状态` 回写到 `docs/integration_board.md`。
+4. 涉及阶段推进时，同步更新 `PROGRESS.md`，确保可跨会话连续推进。
+5. 若用户指令与长期计划冲突，以用户当前指令优先，但在回复中提示影响范围。
+
 ## Project Overview
 
 **BlockKing** is a rhythm-based action game in Godot 4.x where the protagonist can only "block" attacks. The core distinction is between **physical blocking** (short press, deflects melee/projectiles) and **magic blocking** (hold, absorbs/reflects spells). Distance (melee vs ranged) is secondary to the physical/magic dichotomy.

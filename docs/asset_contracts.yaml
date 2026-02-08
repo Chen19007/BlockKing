@@ -1,0 +1,196 @@
+version: "0.1"
+updated_at: "2026-02-08"
+owner:
+  code: "agent"
+  art: "user"
+
+rules:
+  - "代码只通过 asset_id 取资源，不直接写死素材路径。"
+  - "素材未就绪时使用占位资源，不阻塞功能开发。"
+  - "先冻结规格（尺寸/帧率/锚点），后替换内容（风格/配色）。"
+
+assets:
+  - asset_id: "ui.dialog_box"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "960x240"
+      pivot: "center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/dialog_box.png"
+    placeholder_path: "assets/Placeholders/ui_dialog_box.png"
+    due: "W1"
+    status: "integrated"
+
+  - asset_id: "ui.dialog_name_plate"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x64"
+      pivot: "center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/dialog_name_plate.png"
+    placeholder_path: "assets/Placeholders/ui_dialog_name_plate.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "ui.hud_hp_bar"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x48"
+      pivot: "left_center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/hud_hp_bar.png"
+    placeholder_path: "assets/Placeholders/ui_hud_hp_bar.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "ui.hud_hp_fill"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x48"
+      pivot: "left_center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/hud_hp.png"
+    placeholder_path: "assets/Placeholders/ui_hud_hp.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "ui.hud_guard_physical"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "48x48"
+      pivot: "center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/hud_guard_physical.png"
+    placeholder_path: "assets/Placeholders/ui_hud_guard_physical.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "ui.hud_guard_magic"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "48x48"
+      pivot: "center"
+      format: "png"
+      style: "像素风"
+    target_path: "assets/UI/hud_guard_magic.png"
+    placeholder_path: "assets/Placeholders/ui_hud_guard_magic.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "vfx.block_physical_spark"
+    category: "vfx"
+    required: true
+    type: "frames"
+    spec:
+      frame_size: "64x64"
+      frames: "4-8"
+      fps: 12
+      format: "png_sequence"
+      style: "短促金属火花"
+    target_path: "assets/VFX/block_physical_spark/"
+    placeholder_path: "assets/Placeholders/vfx_block_physical_spark.png"
+    due: "W1"
+    status: "integrated"
+
+  - asset_id: "vfx.block_magic_shield"
+    category: "vfx"
+    required: true
+    type: "frames"
+    spec:
+      frame_size: "96x96"
+      frames: "6-10"
+      fps: 12
+      format: "png_sequence"
+      style: "护盾泛光"
+    target_path: "assets/VFX/block_magic_shield/"
+    placeholder_path: "assets/Placeholders/vfx_block_magic_shield.png"
+    due: "W1"
+    status: "integrated"
+    note: "临时降规：当前源图按主连通块切出 4 帧，后续补到 6-10 帧"
+
+  - asset_id: "sfx.block_physical"
+    category: "sfx"
+    required: true
+    type: "audio"
+    spec:
+      format: "ogg"
+      duration: "<= 0.6s"
+      style: "金属碰撞"
+      peak_db: "-1"
+    target_path: "assets/Audio/SFX/block_physical.ogg"
+    placeholder_path: "assets/Placeholders/sfx_block_physical.ogg"
+    due: "W1"
+    status: "todo"
+
+  - asset_id: "sfx.block_magic"
+    category: "sfx"
+    required: true
+    type: "audio"
+    spec:
+      format: "ogg"
+      duration: "<= 0.8s"
+      style: "能量护盾"
+      peak_db: "-1"
+    target_path: "assets/Audio/SFX/block_magic.ogg"
+    placeholder_path: "assets/Placeholders/sfx_block_magic.ogg"
+    due: "W1"
+    status: "todo"
+
+  - asset_id: "sfx.ui_next"
+    category: "sfx"
+    required: true
+    type: "audio"
+    spec:
+      format: "ogg"
+      duration: "<= 0.2s"
+      style: "轻提示"
+      peak_db: "-1"
+    target_path: "assets/Audio/SFX/ui_next.ogg"
+    placeholder_path: "assets/Placeholders/sfx_ui_next.ogg"
+    due: "W1"
+    status: "todo"
+
+  - asset_id: "bgm.section_story"
+    category: "bgm"
+    required: false
+    type: "audio"
+    spec:
+      format: "ogg"
+      loop: true
+      duration: ">= 60s"
+      style: "悬疑探索"
+      peak_db: "-1"
+    target_path: "assets/Audio/BGM/section_story.ogg"
+    placeholder_path: "assets/Placeholders/bgm_section_story.ogg"
+    due: "W2"
+    status: "todo"
+
+  - asset_id: "portrait.narrator"
+    category: "story"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x256"
+      format: "png"
+      style: "像素头像"
+    target_path: "assets/Story/portrait_narrator.png"
+    placeholder_path: "assets/Placeholders/portrait_narrator.png"
+    due: "W1"
+    status: "todo"

@@ -2,9 +2,16 @@ class_name Player
 extends CharacterBody2D
 
 signal respawn_requested
+
+enum PlayerState { IDLE, WALK, JUMP, FALL, BLOCK_PHYSICAL, BLOCK_MAGIC, ATTACK, HURT, DEAD }
+
 const AttackTypeClass = preload("res://system/AttackType.gd")
 const GameFlowConfigClass = preload("res://system/GameFlowConfig.gd")
 const ProjectileScene = preload("res://enemies/Projectile.tscn")
+const BlockImpactVfxScene = preload("res://vfx/BlockImpactVfx.tscn")
+const BLOCK_VFX_OFFSET: float = 24.0
+const PHYSICAL_BLOCK_VFX: StringName = &"block_physical_spark"
+const MAGIC_BLOCK_VFX: StringName = &"block_magic_shield"
 
 @export var move_speed: float = 240.0
 @export var jump_velocity: float = -520.0
@@ -17,6 +24,15 @@ const ProjectileScene = preload("res://enemies/Projectile.tscn")
 @export var e2e_move_speed: float = 220.0
 @export var e2e_projectile_offset: Vector2 = Vector2(240.0, -8.0)
 @export var e2e_projectile_speed: float = 360.0
+@export var camera_horizon_offset_y: float = -220.0
+@export var idle_animation_name: StringName = &"idle"
+@export var walk_animation_name: StringName = &"walk"
+@export var jump_animation_name: StringName = &"jump"
+@export var fall_animation_name: StringName = &"fall"
+@export var block_animation_name: StringName = &"block"
+@export var attack_animation_name: StringName = &"attack"
+@export var hurt_animation_name: StringName = &"hurt"
+@export var death_animation_name: StringName = &"death"
 
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -26,6 +42,11 @@ var _respawn_queued: bool = false
 var _e2e_move_remaining: float = 0.0
 var _debug_force_block_physical: int = -1
 var _debug_force_block_magic: int = -1
+var _facing_dir: float = 1.0
+var _attack_hit_box_origin: Vector2 = Vector2.ZERO
+
+var _player_state: PlayerState = PlayerState.IDLE
+var _current_visual_animation: StringName = &""
 
 var _last_logged_position: Vector2 = Vector2.ZERO
 var _last_input_dir: float = 0.0
@@ -33,24 +54,60 @@ var _last_blocking_physical: bool = false
 var _last_blocking_magic: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var hurt_box: HurtBox = $HurtBox
+@onready var attack_hit_box: HitBox = $HitBox
+@onready var attack_hit_shape: CollisionShape2D = $HitBox/CollisionShape2D
+@onready var camera: Camera2D = $Camera2D
 
 
 func _ready() -> void:
 	add_to_group("player")
+	if hurt_box and not hurt_box.hurt.is_connected(_on_hurt_box_hurt):
+		hurt_box.hurt.connect(_on_hurt_box_hurt)
+	if attack_hit_box:
+		attack_hit_box.attack_type = AttackTypeClass.Type.PHYSICAL
+		attack_hit_box.hit_reason = "player_attack"
+		_attack_hit_box_origin = attack_hit_box.position
+	if attack_hit_shape:
+		attack_hit_shape.disabled = true
+	_apply_camera_horizon()
+	_apply_attack_hitbox_transform()
+	if (
+		animation_player
+		and not animation_player.animation_finished.is_connected(_on_animation_finished)
+	):
+		animation_player.animation_finished.connect(_on_animation_finished)
+		animation_player.play(&"RESET")
+		animation_player.advance(0.0)
+	_play_animation(idle_animation_name)
 	NodeReadyManager.notify_node_ready("Player", self)
 	_last_logged_position = global_position
 
 
 func _physics_process(delta: float) -> void:
+	if _player_state == PlayerState.DEAD:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	_update_block_state()
 
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
-		if Input.is_action_just_pressed("jump"):
+		if _can_accept_action_input() and Input.is_action_just_pressed("jump"):
 			velocity.y = jump_velocity
 
+	if _can_accept_action_input() and Input.is_action_just_pressed("attack"):
+		_start_attack()
+
 	var input_dir = Input.get_axis("move_left", "move_right")
+	if absf(input_dir) > 0.0:
+		_facing_dir = signf(input_dir)
+		if sprite:
+			sprite.flip_h = _facing_dir < 0.0
+	_apply_attack_hitbox_transform()
 	if absf(_e2e_move_remaining) > 0.0:
 		var step = e2e_move_speed * delta
 		var dir = signf(_e2e_move_remaining)
@@ -60,15 +117,17 @@ func _physics_process(delta: float) -> void:
 		if absf(_e2e_move_remaining) <= 0.01:
 			_e2e_move_remaining = 0.0
 	else:
-		if is_blocking_physical or is_blocking_magic:
+		if not _can_accept_action_input() or _is_ground_blocking_locked():
 			velocity.x = 0.0
 		else:
 			velocity.x = input_dir * move_speed
 
+	_update_state_machine(input_dir)
+
 	move_and_slide()
 
-	if global_position.y > fall_respawn_y:
-		request_respawn("fall")
+	#if global_position.y > fall_respawn_y:
+	#request_respawn("fall")
 
 	if debug_log_state:
 		if input_dir != _last_input_dir:
@@ -98,6 +157,9 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("jump"):
 		print("[Input] jump pressed")
+
+	if event.is_action_pressed("attack"):
+		print("[Input] attack pressed")
 
 	if event.is_action_pressed("block_physical"):
 		print("[Input] block_physical pressed")
@@ -309,15 +371,61 @@ func is_blocking_for_attack(attack_type: int) -> bool:
 	return false
 
 
+func can_block_attack_from(attack_type: int, source_direction: Vector2) -> bool:
+	return is_blocking_for_attack(attack_type) and _is_front_attack(source_direction)
+
+
+func get_attack_direction() -> Vector2:
+	return Vector2(_facing_dir, 0.0)
+
+
+func set_camera_limits(limits: Dictionary) -> void:
+	if not camera:
+		return
+	if not limits.get("enabled", false):
+		camera.limit_left = -10000000
+		camera.limit_right = 10000000
+		camera.limit_top = -10000000
+		camera.limit_bottom = 10000000
+		return
+	camera.limit_left = int(limits.get("left", -10000000))
+	camera.limit_right = int(limits.get("right", 10000000))
+	camera.limit_top = int(limits.get("top", -10000000))
+	camera.limit_bottom = int(limits.get("bottom", 10000000))
+
+
 func request_respawn(reason: String = "") -> void:
 	if _respawn_queued:
 		return
+	_transition_player_state(PlayerState.DEAD)
 	_respawn_queued = true
 	print("[State] respawn requested reason=", reason)
 	respawn_requested.emit()
 
 
+func _on_hurt_box_hurt(from: HitBox, source_direction: Vector2) -> void:
+	var attack_type_value: int = AttackTypeClass.Type.PHYSICAL
+	var hit_reason: String = "melee"
+	if from:
+		attack_type_value = from.attack_type
+		if from.hit_reason != "":
+			hit_reason = from.hit_reason
+	var blocked: bool = can_block_attack_from(attack_type_value, source_direction)
+	if blocked:
+		_spawn_block_vfx(attack_type_value, source_direction)
+		print("[Player] hurtbox blocked")
+		return
+	request_respawn(hit_reason)
+
+
 func _update_block_state() -> void:
+	if not _can_accept_action_input():
+		is_blocking_physical = false
+		is_blocking_magic = false
+		if sprite:
+			sprite.modulate = Color(1.0, 1.0, 1.0)
+		return
+
 	var physical = Input.is_action_pressed("block_physical")
 	var magic = Input.is_action_pressed("block_magic")
 	if _debug_force_block_physical >= 0:
@@ -345,3 +453,142 @@ func _update_block_state() -> void:
 			sprite.modulate = Color(0.85, 0.85, 0.85)
 		else:
 			sprite.modulate = Color(1.0, 1.0, 1.0)
+
+
+func _start_attack() -> void:
+	_transition_player_state(PlayerState.ATTACK)
+	print("[State] state -> ATTACK")
+
+
+func _can_accept_action_input() -> bool:
+	return (
+		_player_state != PlayerState.ATTACK
+		and _player_state != PlayerState.HURT
+		and _player_state != PlayerState.DEAD
+	)
+
+
+func _apply_camera_horizon() -> void:
+	if camera:
+		camera.position.y = camera_horizon_offset_y
+
+
+func _is_front_attack(source_direction: Vector2) -> bool:
+	if source_direction.length_squared() <= 0.0001:
+		return false
+	var facing_direction: Vector2 = Vector2(_facing_dir, 0.0)
+	return facing_direction.dot(source_direction.normalized()) >= 0.0
+
+
+func _is_ground_blocking_locked() -> bool:
+	return is_on_floor() and (is_blocking_physical or is_blocking_magic)
+
+
+func _spawn_block_vfx(attack_type_value: int, source_direction: Vector2) -> void:
+	var vfx: BlockImpactVfx = BlockImpactVfxScene.instantiate() as BlockImpactVfx
+	if not vfx:
+		return
+
+	var parent_node: Node = get_parent()
+	if not parent_node:
+		return
+	parent_node.add_child(vfx)
+
+	var effect_direction: Vector2 = source_direction
+	if effect_direction.length_squared() <= 0.0001:
+		effect_direction = Vector2(_facing_dir, 0.0)
+	else:
+		effect_direction = effect_direction.normalized()
+
+	var effect_type: StringName = PHYSICAL_BLOCK_VFX
+	if attack_type_value == AttackTypeClass.Type.MAGIC:
+		effect_type = MAGIC_BLOCK_VFX
+
+	var effect_position: Vector2 = global_position + effect_direction * BLOCK_VFX_OFFSET
+	vfx.play_once(effect_type, effect_position, _facing_dir)
+
+
+func _apply_attack_hitbox_transform() -> void:
+	if not attack_hit_box:
+		return
+	attack_hit_box.position = Vector2(
+		_attack_hit_box_origin.x * _facing_dir, _attack_hit_box_origin.y
+	)
+
+
+func _update_state_machine(input_dir: float) -> void:
+	if _player_state == PlayerState.ATTACK:
+		return
+	_transition_player_state(_resolve_non_attack_state(input_dir))
+
+
+func _resolve_non_attack_state(input_dir: float) -> PlayerState:
+	if not is_on_floor():
+		if velocity.y < 0.0:
+			return PlayerState.JUMP
+		return PlayerState.FALL
+	if is_blocking_physical or is_blocking_magic:
+		if is_blocking_magic:
+			return PlayerState.BLOCK_MAGIC
+		return PlayerState.BLOCK_PHYSICAL
+	if absf(input_dir) > 0.0:
+		return PlayerState.WALK
+	return PlayerState.IDLE
+
+
+func _transition_player_state(next_state: PlayerState) -> void:
+	if _player_state == next_state:
+		return
+	_player_state = next_state
+	_play_animation(_state_to_animation(next_state))
+
+
+func _state_to_animation(state: PlayerState) -> StringName:
+	var animation_name: StringName = idle_animation_name
+	match state:
+		PlayerState.ATTACK:
+			animation_name = attack_animation_name
+		PlayerState.HURT:
+			animation_name = hurt_animation_name
+		PlayerState.DEAD:
+			animation_name = death_animation_name
+		PlayerState.BLOCK_PHYSICAL, PlayerState.BLOCK_MAGIC:
+			animation_name = block_animation_name
+		PlayerState.WALK:
+			animation_name = walk_animation_name
+		PlayerState.JUMP:
+			animation_name = jump_animation_name
+		PlayerState.FALL:
+			animation_name = fall_animation_name
+	return animation_name
+
+
+func _play_animation(animation_name: StringName) -> void:
+	if not animation_player:
+		return
+	var target_animation: StringName = animation_name
+	if not animation_player.has_animation(target_animation):
+		if (
+			target_animation != idle_animation_name
+			and animation_player.has_animation(idle_animation_name)
+		):
+			target_animation = idle_animation_name
+		else:
+			return
+	if _current_visual_animation == target_animation:
+		return
+	_current_visual_animation = target_animation
+	animation_player.play(target_animation)
+
+
+func _on_animation_finished(anim_name: StringName) -> void:
+	if anim_name == attack_animation_name and _player_state == PlayerState.ATTACK:
+		var input_dir: float = Input.get_axis("move_left", "move_right")
+		_transition_player_state(_resolve_non_attack_state(input_dir))
+		print("[State] state <- ATTACK finished")
+		return
+	if anim_name == hurt_animation_name and _player_state == PlayerState.HURT:
+		var input_dir_after_hurt: float = Input.get_axis("move_left", "move_right")
+		_transition_player_state(_resolve_non_attack_state(input_dir_after_hurt))
+		print("[State] state <- HURT finished")
+		return

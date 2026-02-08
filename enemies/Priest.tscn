@@ -1,24 +1,204 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=44 format=3]
 
 [ext_resource type="Script" path="res://enemies/Priest.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/Priest/Idle/0.png" id="2"]
 [ext_resource type="PackedScene" path="res://enemies/Projectile.tscn" id="3"]
+[ext_resource type="Script" path="res://system/HitBox.gd" id="4"]
+[ext_resource type="Script" path="res://system/HurtBox.gd" id="5"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Idle/1.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Idle/2.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Idle/3.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Idle/4.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Idle/5.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/0.png" id="11"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/1.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/2.png" id="13"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/3.png" id="14"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/4.png" id="15"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/5.png" id="16"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/6.png" id="17"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Walk/7.png" id="18"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/0.png" id="19"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/1.png" id="20"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/2.png" id="21"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/3.png" id="22"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/4.png" id="23"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/5.png" id="24"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/6.png" id="25"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/7.png" id="26"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Attack/8.png" id="27"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Hurt/0.png" id="28"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Hurt/1.png" id="29"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Hurt/2.png" id="30"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Hurt/3.png" id="31"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Death/0.png" id="32"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Death/1.png" id="33"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Death/2.png" id="34"]
+[ext_resource type="Texture2D" path="res://assets/Priest/Death/3.png" id="35"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(32, 64)
+size = Vector2(56, 88)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(44, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+size = Vector2(52, 84)
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 0.48
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10")]
+}
+
+[sub_resource type="Animation" id="Animation_walk"]
+resource_name = "walk"
+length = 0.64
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15"), ExtResource("16"), ExtResource("17"), ExtResource("18")]
+}
+
+[sub_resource type="Animation" id="Animation_attack"]
+resource_name = "attack"
+length = 0.72
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("19"), ExtResource("20"), ExtResource("21"), ExtResource("22"), ExtResource("23"), ExtResource("24"), ExtResource("25"), ExtResource("26"), ExtResource("27")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.32),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"anim_commit_attack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_hurt"]
+resource_name = "hurt"
+length = 0.32
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("28"), ExtResource("29"), ExtResource("30"), ExtResource("31")]
+}
+
+[sub_resource type="Animation" id="Animation_death"]
+resource_name = "death"
+length = 0.32
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("32"), ExtResource("33"), ExtResource("34"), ExtResource("35")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_enemy"]
+_data = {
+&"attack": SubResource("Animation_attack"),
+&"death": SubResource("Animation_death"),
+&"hurt": SubResource("Animation_hurt"),
+&"idle": SubResource("Animation_idle"),
+&"walk": SubResource("Animation_walk")
+}
 
 [node name="Priest" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
 script = ExtResource("1")
 is_ranged = true
 attack_type = 1
 attack_range = 520.0
 attack_cooldown = 1.6
 projectile_scene = ExtResource("3")
-move_speed = 0.0
+move_speed = 120.0
+max_health = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2")
 centered = true
+scale = Vector2(4, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1")
+
+[node name="DetectRay" type="RayCast2D" parent="."]
+enabled = true
+target_position = Vector2(640, 0)
+collision_mask = 2
+
+[node name="AttackRay" type="RayCast2D" parent="."]
+enabled = true
+target_position = Vector2(520, 0)
+collision_mask = 2
+
+[node name="HitBox" type="Area2D" parent="."]
+position = Vector2(0, 18)
+script = ExtResource("4")
+collision_layer = 128
+collision_mask = 16
+attack_type = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("RectangleShape2D_2")
+
+[node name="HurtBox" type="Area2D" parent="."]
+script = ExtResource("5")
+collision_layer = 64
+collision_mask = 0
+monitoring = true
+monitorable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("AnimationLibrary_enemy")

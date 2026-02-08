@@ -1,0 +1,53 @@
+updated_at: "2026-02-08"
+method: "alpha_connected_components"
+alpha_threshold: 10
+component_area_threshold: 3000
+selection_rule: "按 x 坐标排序，取 4 个主连通块"
+
+vfx:
+  block_physical_spark:
+    source: "assets/VFX/block_physical_spark/block_physical_spark.png"
+    source_image_size: [997, 97]
+    output_frame_size: [64, 64]
+    frame_count: 4
+    frames:
+      - index: 0
+        bbox: [2, 10, 193, 86]
+        source_size: [192, 77]
+        output: "assets/VFX/block_physical_spark/frames/frame_00.png"
+      - index: 1
+        bbox: [258, 0, 458, 90]
+        source_size: [201, 91]
+        output: "assets/VFX/block_physical_spark/frames/frame_01.png"
+      - index: 2
+        bbox: [506, 0, 721, 89]
+        source_size: [216, 90]
+        output: "assets/VFX/block_physical_spark/frames/frame_02.png"
+      - index: 3
+        bbox: [776, 6, 953, 88]
+        source_size: [178, 83]
+        output: "assets/VFX/block_physical_spark/frames/frame_03.png"
+
+  block_magic_shield:
+    source: "assets/VFX/block_magic_shield/block_magic_shield.png"
+    source_image_size: [1119, 165]
+    output_frame_size: [96, 96]
+    frame_count: 4
+    note: "临时降规：当前源图仅识别到 4 个主帧，后续可补到 6-10 帧"
+    frames:
+      - index: 0
+        bbox: [33, 12, 271, 143]
+        source_size: [239, 132]
+        output: "assets/VFX/block_magic_shield/frames/frame_00.png"
+      - index: 1
+        bbox: [329, 10, 547, 144]
+        source_size: [219, 135]
+        output: "assets/VFX/block_magic_shield/frames/frame_01.png"
+      - index: 2
+        bbox: [584, 8, 815, 147]
+        source_size: [232, 140]
+        output: "assets/VFX/block_magic_shield/frames/frame_02.png"
+      - index: 3
+        bbox: [859, 10, 1071, 147]
+        source_size: [213, 138]
+        output: "assets/VFX/block_magic_shield/frames/frame_03.png"

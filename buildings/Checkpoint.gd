@@ -2,11 +2,15 @@ extends Area2D
 
 signal checkpoint_activated
 
+const CollisionLayersClass = preload("res://system/CollisionLayers.gd")
+
 var spawned_player: Node = null
 var _activated: bool = false
 
 
 func _ready() -> void:
+	collision_layer = CollisionLayersClass.WORLD_PHYSICS
+	collision_mask = CollisionLayersClass.PLAYER_PHYSICS
 	NodeReadyManager.notify_node_ready("Checkpoint", self)
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
@@ -36,6 +40,18 @@ func _activate_checkpoint() -> void:
 
 
 func spawn_player() -> void:
+	var section = get_parent()
+	var has_existing_player: bool = false
+	if section:
+		for child in section.get_children():
+			if not (child is Node2D):
+				continue
+			if child.is_in_group("player"):
+				has_existing_player = true
+				child.queue_free()
+	if has_existing_player:
+		await get_tree().process_frame
+
 	if spawned_player and is_instance_valid(spawned_player):
 		spawned_player.queue_free()
 		await get_tree().process_frame
@@ -56,7 +72,7 @@ func spawn_player() -> void:
 		return
 
 	spawned_player.name = "Player"
-	var section = get_parent()
+	section = get_parent()
 	if section:
 		section.add_child(spawned_player)
 		spawned_player.position = position

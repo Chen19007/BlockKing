@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://stages/stage0/TutorialSection.gd" id="1"]
+[ext_resource type="PackedScene" path="res://buildings/Checkpoint.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://buildings/Transport.tscn" id="3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(2200, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(120, 240)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+size = Vector2(120, 240)
+
+[node name="section0_tutorial" type="Node2D"]
+script = ExtResource("1")
+section_id = "section0_tutorial"
+
+[node name="RespawnPoint" type="Node2D" parent="."]
+position = Vector2(100, 300)
+
+[node name="DebugMarkerA" type="Marker2D" parent="."]
+position = Vector2(250, 300)
+
+[node name="DebugMarkerB" type="Marker2D" parent="."]
+position = Vector2(1450, 300)
+
+[node name="Checkpoint" parent="." instance=ExtResource("2")]
+position = Vector2(100, 300)
+
+[node name="SpawnPhysical" type="Marker2D" parent="."]
+position = Vector2(620, 336)
+
+[node name="SpawnMagic" type="Marker2D" parent="."]
+position = Vector2(1120, 336)
+
+[node name="TriggerPhysical" type="Area2D" parent="."]
+position = Vector2(430, 300)
+monitoring = true
+monitorable = true
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerPhysical"]
+shape = SubResource("RectangleShape2D_2")
+
+[node name="TriggerMagic" type="Area2D" parent="."]
+position = Vector2(920, 300)
+monitoring = true
+monitorable = true
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerMagic"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(980, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Transport" parent="." instance=ExtResource("3")]
+position = Vector2(1680, 300)
+target_section_id = "section1_1"

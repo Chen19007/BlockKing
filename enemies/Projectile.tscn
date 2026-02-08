@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://enemies/Projectile.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/Skeleton Archer/Attack/0.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/Projectile/Arrow01_32.png" id="2"]
+[ext_resource type="Script" path="res://system/HitBox.gd" id="3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 6.0
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2"]
+radius = 12.0
 
 [node name="Projectile" type="Area2D"]
 script = ExtResource("1")
@@ -12,6 +16,17 @@ script = ExtResource("1")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2")
 centered = true
+scale = Vector2(4, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1")
+
+[node name="HitBox" type="Area2D" parent="."]
+script = ExtResource("3")
+collision_layer = 128
+collision_mask = 16
+attack_type = 0
+hit_reason = "projectile"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_2")

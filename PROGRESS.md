@@ -1,68 +1,74 @@
-# BlockKing Implementation Progress
+# BlockKing 进度看板（长期协作版）
 
-Last updated: 2026-01-28
+更新时间：2026-02-08
 
-## Current Status (Summary)
+## 1. 当前实现快照（基于仓库实际）
 
-- Core flow: Main loads/unloads sections and switches via Transport.
-- Sections: `section1_1` and `section1_2` exist with checkpoints, transport, floor, and debug markers.
-- Player: movement, jump, physical/magic block, fall + combat respawn triggers.
-- Input: mappings corrected in `project.godot`.
-- Checkpoints: activation updates respawn point (E2E verified).
-- Enemies: Slime/Skeleton melee, Skeleton Archer projectile (physical), Priest projectile (magic).
-- Test stability: melee enemies set to stand still (move_speed = 0) for E2E.
-- Web E2E: verified via Chrome DevTools input injection and console logs (projectile reflect, melee block/hit, respawn).
-- E2E scaffolding: combo-key debug moves, marker teleport/set, forced block toggles, test projectile spawn (physical/magic).
-- E2E scaffolding: PageUp/PageDown section switch (debug).
+- 关卡主流程已跑通：`Main.gd` + `system/GameFlowConfig.gd` 支持 Section 加载/切换/重生。
+- 当前关卡流包含教学与第一章：`stage0/section0_tutorial`、`stage1/section1_1`、`stage1/section1_2`。
+- 玩家核心动作可用：移动、跳跃、攻击、物理/魔法格挡、受击重生（`player/Player.gd`）。
+- 教学关卡已实现触发链：物理教学 -> 魔法教学 -> 解锁传送（`stages/stage0/TutorialSection.gd`）。
+- 对话 UI 已接入主场景并由 `AssetRegistry` 动态取素材（`Main.tscn`、`ui/DialogueUI.gd`）。
+- 已修复：切关后对话框残留显示，`unload_section()` 会统一隐藏 `DialogueUI`（`Main.gd`）。
 
-## Milestones
+## 2. 里程碑状态
 
-### 0) Foundation (Done)
+### M0 基础流程（完成）
 
-- [x] Section flow (Main/GameFlowConfig/Section)
-- [x] Checkpoint spawn + Transport switch
-- [x] Input mapping in `project.godot`
-- [x] Player move/jump/physical+magic block
-- [x] Fall-based respawn
-- [x] Chrome DevTools E2E verification
-- [x] E2E debug scaffolding (combo keys + DebugMarkerA/B)
+- [x] Section 切换（Main/Transport）
+- [x] Checkpoint 出生与重生
+- [x] 输入映射与 E2E 调试快捷键
 
-### 1) Combat Model (Done)
+### M1 战斗最小闭环（完成）
 
-- [x] Define attack types: physical vs magic (data + enums)
-- [x] Block resolution: physical blocks physical, magic blocks magic
+- [x] 物理/魔法攻击类型区分
+- [x] 对应格挡判定与受击重生
+- [x] 基础敌人与投射物链路
 
-### 2) Enemy + Projectile MVP (Done)
+### M2 教学与剧情基础（部分完成）
 
-- [x] Base enemy AI (idle, approach, attack)
-- [x] Slime + Skeleton placeholders (Chapter 1)
-- [x] Skeleton Archer boss + basic projectile
-- [x] Physical projectile reflection on block
+- [x] 教学关卡 `section0_tutorial`
+- [x] `DialogueUI` 基础显示与素材注入
+- [ ] `StoryTrigger` 通用节点
+- [ ] `StoryEventRunner`（Autoload）
+- [ ] `StoryData`（JSON/Resource 数据驱动）
 
-### 3) Chapter 1 Layout (Per DESIGN.md)
+### M3 可发行 Demo 配套（未完成）
 
-- [ ] Room 1: Slime x2
-- [ ] Room 2: Slime x3 -> Skeleton x2
-- [ ] Room 3: Skeleton x3
-- [ ] Room 4: Skeleton Archer boss
-- [ ] Section split into room checkpoints/trigger volumes
+- [ ] 主菜单与完整流程入口
+- [ ] HUD（HP/格挡状态/目标）
+- [ ] Demo 结算页与回环
 
-### 4) Chapters 2–6 (Sequence)
+## 3. 本周执行清单（2026-02-08 起）
 
-- [ ] Chapter 2: Armored/Greatsword skeletons + Axeman boss
-- [ ] Chapter 3: Orc + Archer + Orc rider boss
-- [ ] Chapter 4: Soldier/Swordsman/Priest + Knight boss
-- [ ] Chapter 5: Werewolf/Lancer + Werebear boss
-- [ ] Chapter 6: Priest/Elite Orc + Wizard boss
+1. 补齐 W1 缺口素材并接入：
+   - `sfx.block_physical`
+   - `sfx.block_magic`
+   - `sfx.ui_next`
+   - `portrait.narrator`
+2. 开始 W3 通用剧情架构：
+   - 先做 `StoryEventRunner` 最小可用版本（仅串行播放对白）
+   - 再抽出 `StoryTrigger`，替换教学关卡内硬编码触发
+3. 建立每周固定回归：
+   - 从入口到通关/切关全流程跑一轮，记录到本文件“回归记录”。
 
-### 5) UI / VFX / SFX (Placeholder → Final)
+## 4. 阻塞与风险
 
-- [ ] UI: HP + physical/magic guard meters
-- [ ] VFX: block sparks / magic shield glow
-- [ ] SFX: block / jump / hit / death
+- 音频资产仍缺：`assets` 下未检出 `*.ogg/*.wav/*.mp3`，会限制对白音效与战斗反馈落地。
+- 剧情系统目前偏场景脚本实现，若不尽快抽象为 `StoryTrigger/Runner/Data`，后续章节复制成本会升高。
 
-## Next Actions (Proposed)
+## 5. 回归记录
 
-1) Implement attack-type model + HitBox/HurtBox baseline.
-2) Add simple enemy spawner and projectile system.
-3) Build Chapter 1 rooms per DESIGN.md and verify via E2E.
+### 2026-02-08
+
+- 场景：教学关卡通关后切关。
+- 预期：切换 Section 后不显示上一关遗留 DialogBox。
+- 实际：`Main.unload_section()` 调用 `_hide_dialogue_ui()` 后隐藏成功。
+- 结果：通过。
+
+## 6. 下次会话入口
+
+- 优先处理：`StoryEventRunner` 最小实现 + 接入 `section0_tutorial`。
+- 完成后同步更新：
+  - `DEMO_RELEASE_PLAN.md` 的“当前现状”
+  - `docs/integration_board.md` 的素材状态

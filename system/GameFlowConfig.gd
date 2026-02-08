@@ -2,6 +2,7 @@ class_name GameFlowConfig
 extends RefCounted
 
 static var game_flow: Array[Dictionary] = [
+	{"stage_id": "stage0", "sections": ["section0_tutorial"]},
 	{"stage_id": "stage1", "sections": ["section1_1", "section1_2"]}
 ]
 

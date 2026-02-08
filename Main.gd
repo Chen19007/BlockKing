@@ -37,6 +37,7 @@ func set_current_checkpoint(checkpoint: Node2D) -> void:
 
 
 func unload_section() -> void:
+	_hide_dialogue_ui()
 	if not current_section:
 		return
 	_disconnect_section_signals()
@@ -127,6 +128,7 @@ func _on_player_ready(_node_name: String, _node: Node) -> void:
 	if player and player.has_signal("respawn_requested"):
 		if not player.respawn_requested.is_connected(_on_player_respawn_requested):
 			player.respawn_requested.connect(_on_player_respawn_requested)
+	_apply_camera_limits_to_player(player)
 
 
 func _on_player_respawn_requested() -> void:
@@ -147,3 +149,18 @@ func _respawn_player() -> void:
 		current_checkpoint.spawn_player()
 		await NodeReadyManager.wait_for_node_ready("Player")
 		print("[Main] Respawn complete")
+
+
+func _apply_camera_limits_to_player(player: Node) -> void:
+	if not player or not player.has_method("set_camera_limits"):
+		return
+	if not current_section or not current_section.has_method("get_camera_limits"):
+		return
+	var limits: Dictionary = current_section.get_camera_limits()
+	player.call("set_camera_limits", limits)
+
+
+func _hide_dialogue_ui() -> void:
+	var dialogue_ui := get_node_or_null("DialogueUI") as DialogueUI
+	if dialogue_ui:
+		dialogue_ui.hide_dialogue()

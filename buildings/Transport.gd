@@ -3,6 +3,7 @@ extends Area2D
 signal section_transport_requested(target_section_id: String)
 
 const GameFlowConfigClass = preload("res://system/GameFlowConfig.gd")
+const CollisionLayersClass = preload("res://system/CollisionLayers.gd")
 
 @export var teleport_to_respawn: bool = true
 @export var target_section_id: String = ""
@@ -11,6 +12,8 @@ var is_teleporting: bool = false
 
 
 func _ready() -> void:
+	collision_layer = CollisionLayersClass.WORLD_PHYSICS
+	collision_mask = CollisionLayersClass.PLAYER_PHYSICS
 	if target_section_id == "":
 		var section = get_parent()
 		if section and "section_id" in section:
