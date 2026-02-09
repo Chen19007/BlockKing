@@ -1,5 +1,5 @@
 version: "0.1"
-updated_at: "2026-02-08"
+updated_at: "2026-02-09"
 owner:
   code: "agent"
   art: "user"
@@ -180,6 +180,82 @@ assets:
     target_path: "assets/Audio/BGM/section_story.ogg"
     placeholder_path: "assets/Placeholders/bgm_section_story.ogg"
     due: "W2"
+    status: "integrated"
+    source_version: "bgm-story-v2026-02-09-01"
+    attribution_ref: "docs/ATTRIBUTION.md"
+
+  - asset_id: "bgm.section_battle"
+    category: "bgm"
+    required: false
+    type: "audio"
+    spec:
+      format: "ogg"
+      loop: true
+      duration: ">= 60s"
+      style: "常规战斗"
+      peak_db: "-1"
+    target_path: "assets/Audio/BGM/section_battle.ogg"
+    placeholder_path: "assets/Placeholders/bgm_section_battle.ogg"
+    due: "W2"
+    status: "integrated"
+    source_file: "D:/download/cute_bass.mp3"
+    source_version: "bgm-battle-v2026-02-09-01"
+    attribution_ref: "docs/ATTRIBUTION.md"
+
+  - asset_id: "bgm.section_boss"
+    category: "bgm"
+    required: false
+    type: "audio"
+    spec:
+      format: "ogg"
+      loop: true
+      duration: ">= 60s"
+      style: "Boss战斗"
+      peak_db: "-1"
+    target_path: "assets/Audio/BGM/section_boss.ogg"
+    placeholder_path: "assets/Placeholders/bgm_section_boss.ogg"
+    due: "W2"
+    status: "todo"
+
+  - asset_id: "bgm.section_result"
+    category: "bgm"
+    required: false
+    type: "audio"
+    spec:
+      format: "ogg"
+      loop: false
+      duration: "30s~90s"
+      style: "结算过渡"
+      peak_db: "-1"
+    target_path: "assets/Audio/BGM/section_result.ogg"
+    placeholder_path: "assets/Placeholders/bgm_section_result.ogg"
+    due: "W2"
+    status: "todo"
+
+  - asset_id: "font.ui_serif_cn"
+    category: "font"
+    required: true
+    type: "font"
+    spec:
+      format: "ttf_or_otf"
+      style: "中文衬线正文（建议思源宋体）"
+      usage: "剧情对话、教程提示、系统文本"
+    target_path: "assets/Fonts/ui_serif_cn.otf"
+    placeholder_path: "assets/Placeholders/ui_serif_cn.otf"
+    due: "W2"
+    status: "integrated"
+
+  - asset_id: "font.ui_sans_cn"
+    category: "font"
+    required: false
+    type: "font"
+    spec:
+      format: "ttf_or_otf"
+      style: "中文无衬线（建议思源黑体）"
+      usage: "高密度说明文本"
+    target_path: "assets/Fonts/ui_sans_cn.ttf"
+    placeholder_path: "assets/Placeholders/ui_sans_cn.ttf"
+    due: "W2"
     status: "todo"
 
   - asset_id: "portrait.narrator"
@@ -190,7 +266,34 @@ assets:
       size: "256x256"
       format: "png"
       style: "像素头像"
+      layout: "支持 frame + character 拆分，保留合成回退图"
     target_path: "assets/Story/portrait_narrator.png"
     placeholder_path: "assets/Placeholders/portrait_narrator.png"
     due: "W1"
-    status: "todo"
+    status: "ready"
+
+  - asset_id: "portrait.narrator_frame"
+    category: "story"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x256"
+      format: "png"
+      style: "像素头像外框"
+    target_path: "assets/Story/portrait_narrator_frame.png"
+    placeholder_path: "assets/Placeholders/portrait_narrator_frame.png"
+    due: "W1"
+    status: "ready"
+
+  - asset_id: "portrait.narrator_character"
+    category: "story"
+    required: true
+    type: "texture"
+    spec:
+      size: "256x256"
+      format: "png"
+      style: "像素头像角色主体"
+    target_path: "assets/Story/portrait_narrator_character.png"
+    placeholder_path: "assets/Placeholders/portrait_narrator_character.png"
+    due: "W1"
+    status: "ready"

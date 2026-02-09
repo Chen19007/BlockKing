@@ -1,5 +1,7 @@
 extends Node2D
 
+const STORY_DATA_CLASS = preload("res://system/StoryData.gd")
+
 @export var section_id: String = "section1_1"
 @export var respawn_point: Vector2 = Vector2.ZERO
 @export var camera_limit_enabled: bool = false
@@ -9,11 +11,13 @@ extends Node2D
 @export var camera_limit_bottom: float = INF
 
 @onready var respawn_marker: Node2D = get_node_or_null("RespawnPoint")
+@onready var intro_trigger: StoryTrigger = get_node_or_null("TriggerIntro") as StoryTrigger
 
 
 func _ready() -> void:
 	if respawn_marker:
 		respawn_point = respawn_marker.position
+	_apply_intro_dialogues()
 
 
 func get_respawn_point() -> Vector2:
@@ -40,3 +44,12 @@ func get_camera_limits() -> Dictionary:
 		"top": section_global_pos.y + camera_limit_top,
 		"bottom": section_global_pos.y + camera_limit_bottom
 	}
+
+
+func _apply_intro_dialogues() -> void:
+	if intro_trigger == null:
+		return
+	var intro_lines: Array[String] = STORY_DATA_CLASS.get_lines(section_id, &"intro")
+	if intro_lines.is_empty():
+		return
+	intro_trigger.dialogue_lines = intro_lines

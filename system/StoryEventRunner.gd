@@ -3,6 +3,9 @@ extends Node
 signal story_started
 signal story_finished
 
+const SCREENSHOT_KEYCODE: Key = KEY_F12
+const SCREENSHOT_FALLBACK_KEYCODE: Key = KEY_P
+
 var advance_action: StringName = &"attack"
 
 var _is_playing: bool = false
@@ -12,7 +15,14 @@ var _pause_player_input: bool = true
 
 
 func _ready() -> void:
+	set_process_input(true)
 	set_process_unhandled_input(true)
+
+
+func _input(event: InputEvent) -> void:
+	if _is_screenshot_shortcut(event):
+		_capture_dialogue_preview()
+		get_viewport().set_input_as_handled()
 
 
 func play_dialogues(lines: Array[String], pause_player_input: bool = true) -> void:
@@ -32,6 +42,11 @@ func play_dialogues(lines: Array[String], pause_player_input: bool = true) -> vo
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _is_screenshot_shortcut(event):
+		_capture_dialogue_preview()
+		get_viewport().set_input_as_handled()
+		return
+
 	if not _is_playing:
 		return
 	if event.is_action_pressed(advance_action):
@@ -92,3 +107,31 @@ func _lock_player_input(locked: bool) -> void:
 
 func is_story_playing() -> bool:
 	return _is_playing
+
+
+func _is_screenshot_shortcut(event: InputEvent) -> bool:
+	var key_event := event as InputEventKey
+	if key_event == null:
+		return false
+	if not key_event.pressed or key_event.echo:
+		return false
+	var is_match_keycode := (
+		key_event.keycode == SCREENSHOT_KEYCODE
+		or key_event.keycode == SCREENSHOT_FALLBACK_KEYCODE
+		or key_event.physical_keycode == SCREENSHOT_KEYCODE
+		or key_event.physical_keycode == SCREENSHOT_FALLBACK_KEYCODE
+	)
+	if not is_match_keycode:
+		return false
+	var with_combo := key_event.ctrl_pressed and key_event.alt_pressed and key_event.shift_pressed
+	var no_modifier := (
+		not key_event.ctrl_pressed and not key_event.alt_pressed and not key_event.shift_pressed
+	)
+	return with_combo or no_modifier
+
+
+func _capture_dialogue_preview() -> void:
+	var dialogue_ui := _get_dialogue_ui()
+	if not dialogue_ui:
+		return
+	dialogue_ui.capture_dialogue_screenshot()

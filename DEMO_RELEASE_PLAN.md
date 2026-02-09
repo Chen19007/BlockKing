@@ -27,13 +27,13 @@
 
 ### 2.2 资源现状
 - 资源文件主要是 `.png/.import`（图片资源完整度高）。
-- 未检出外部音频文件（`*.wav/*.ogg/*.mp3`）；短 SFX 已切换为代码生成方案，
-  BGM 与长音频仍是缺口。
-- 当前已存在教学关卡对白脚本与 `DialogueUI`（`stages/stage0/TutorialSection.gd`、`ui/DialogueUI.gd`），
-  但 `StoryTrigger` / `StoryEventRunner` / `StoryData` 仍未落地。
+- 具体资源接入状态以 `docs/integration_board.md` 为准。
+- 具体实现进展与回归记录以 `PROGRESS.md` 为准。
+- 版权/署名信息以 `docs/ATTRIBUTION.md` 为准（唯一来源）。
 
 ### 2.3 管理现状（本次刷新）
 - 已建立长期协作跟踪基线：`DEMO_RELEASE_PLAN.md`（计划）、`PROGRESS.md`（进度）、`docs/integration_board.md`（素材接入）。
+- 素材版权/署名信息统一维护在 `docs/ATTRIBUTION.md`（唯一来源），其他文档仅保留引用。
 - 后续默认按周更新“完成项/阻塞项/下一步”，避免只写实现不做管理。
 
 ---

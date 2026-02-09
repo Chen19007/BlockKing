@@ -12,10 +12,12 @@ enum TutorialStep {
 const SkeletonArcherScene = preload("res://enemies/SkeletonArcher.tscn")
 const PriestScene = preload("res://enemies/Priest.tscn")
 const CollisionLayersClass = preload("res://system/CollisionLayers.gd")
+const StoryDataClass = preload("res://system/StoryData.gd")
 
 var _step: TutorialStep = TutorialStep.INTRO
 var _physical_enemy: BaseEnemy = null
 var _magic_enemy: BaseEnemy = null
+var _dialogues: Dictionary = {}
 
 @onready var physical_trigger: StoryTrigger = $TriggerPhysical
 @onready var magic_trigger: StoryTrigger = $TriggerMagic
@@ -26,13 +28,15 @@ var _magic_enemy: BaseEnemy = null
 
 func _ready() -> void:
 	super._ready()
+	_load_story_data()
 	_bind_triggers()
 	_set_transport_enabled(false)
-	_play_dialogue(["教学：A/D移动，空格跳跃，L攻击。先向右前进。"])
+	_play_dialogue(_get_story_lines(&"intro"))
 	_step = TutorialStep.WAIT_PHYSICAL_TRIGGER
 
 
 func _bind_triggers() -> void:
+	_apply_trigger_dialogues()
 	if physical_trigger:
 		physical_trigger.collision_layer = CollisionLayersClass.WORLD_PHYSICS
 		physical_trigger.collision_mask = CollisionLayersClass.PLAYER_PHYSICS
@@ -86,7 +90,7 @@ func _on_physical_enemy_exited() -> void:
 	_physical_enemy = null
 	if _step != TutorialStep.WAIT_PHYSICAL_DEFEAT:
 		return
-	_play_dialogue(["做得好，继续向右前进，学习魔法格挡。"])
+	_play_dialogue(_get_story_lines(&"after_physical"))
 	_step = TutorialStep.WAIT_MAGIC_TRIGGER
 
 
@@ -94,7 +98,7 @@ func _on_magic_enemy_exited() -> void:
 	_magic_enemy = null
 	if _step != TutorialStep.WAIT_MAGIC_DEFEAT:
 		return
-	_play_dialogue(["教学完成，你现在可以自由行动。前往右侧传送点进入第一关。"])
+	_play_dialogue(_get_story_lines(&"after_magic"))
 	_set_transport_enabled(true)
 	_step = TutorialStep.FREE
 
@@ -109,3 +113,27 @@ func _set_transport_enabled(enabled: bool) -> void:
 func _play_dialogue(lines: Array[String]) -> void:
 	var runner := get_node("/root/StoryEventRunner") as StoryEventRunner
 	runner.play_dialogues(lines, true)
+
+
+func _load_story_data() -> void:
+	_dialogues = StoryDataClass.get_dialogues(section_id)
+
+
+func _apply_trigger_dialogues() -> void:
+	if physical_trigger:
+		physical_trigger.dialogue_lines = _get_story_lines(
+			&"trigger_physical", physical_trigger.dialogue_lines
+		)
+	if magic_trigger:
+		magic_trigger.dialogue_lines = _get_story_lines(&"trigger_magic", magic_trigger.dialogue_lines)
+
+
+func _get_story_lines(key: StringName, fallback: Array[String] = []) -> Array[String]:
+	var raw_lines: Variant = _dialogues.get(String(key), fallback)
+	var lines: Array[String] = []
+	if raw_lines is Array:
+		for line_variant in raw_lines:
+			lines.append(str(line_variant))
+	if lines.is_empty():
+		return fallback
+	return lines

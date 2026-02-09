@@ -14,6 +14,18 @@
 - 玩家已接入生成式短 SFX 触发：跳跃/落地/挥砍/格挡命中（`player/Player.gd`）。
 - `DialogueUI` 翻页音默认走生成式 click，保留采样流作为回退（`ui/DialogueUI.gd`）。
 - 已接入 `DifficultyManager` 统一冷却配置：教学关提高敌人攻击冷却，非教学关按已选难度配置（`system/DifficultyManager.gd`、`Main.gd`、`enemies/BaseEnemy.gd`）。
+- 已接入 `bgm.section_story`：主流程由 `Main.gd` 全局循环播放 `assets/Audio/BGM/section_story.ogg`。
+- 已接入 BGM 路由与切换淡入淡出：按 `section_id` 选择音乐，缺失资源自动回退 `bgm.section_story`（`Main.gd`）。
+- `DialogueUI` 已支持 `portrait.narrator_frame + portrait.narrator_character` 双图优先加载，保留 `portrait.narrator` 单图回退。
+- `DialogueUI` 文本风格统一代码已就绪：支持 `font.ui_serif_cn` 自动加载、暖色字/描边/阴影参数、轻量 parchment shader（`ui/DialogueUI.gd`、`ui/shaders/text_parchment.gdshader`）。
+- `font.ui_serif_cn` 已落地：`assets/Fonts/ui_serif_cn.otf`（SourceHanSerifCN-Regular），已与对话文本主题联通。
+- `DialogueUI` 文本可读性已调优：黄底场景改为深墨主字 + 浅暖描边 + 弱阴影，并在 shader material 显式锁定参数，避免主题与材质不一致。
+- 已加入对话截图调色辅助：`F12` / `P`（兼容 `Ctrl+Alt+Shift+F12` / `P`）在对话显示时保存 `user://dialogue_preview.png`，编辑器下额外写入 `res://dialogue_preview.png`。
+- 文本主色已按调色结果更新并冻结：`RGB(182,51,32)`（`#B63320`），描边/阴影暂不调整。
+- 教程开场文案已更新为三行（`A/D移动`、`W跳跃`、`L攻击，先向右前进。`），并去掉“教学：”前缀（`story_data/section0_tutorial.json`）。
+- 第一章剧情数据化已推进：`section1_1`、`section1_2` 新增进场触发器并改为读取 `story_data/*.json`（`stages/stage1/Section.gd`、`story_data/section1_1.json`、`story_data/section1_2.json`）。
+- 战斗 BGM 已落地：`D:/download/cute_bass.mp3` 转码为 `assets/Audio/BGM/section_battle.ogg` 并可被 `Main.gd` 路由命中，版本 `bgm-battle-v2026-02-09-01`。
+- 音频署名信息已统一收敛到 `docs/ATTRIBUTION.md`（唯一来源）。
 
 ## 2. 里程碑状态
 
@@ -35,7 +47,7 @@
 - [x] `DialogueUI` 基础显示与素材注入
 - [x] `StoryTrigger` 通用节点
 - [x] `StoryEventRunner`（Autoload）
-- [ ] `StoryData`（JSON/Resource 数据驱动）
+- [x] `StoryData`（JSON 数据驱动，教程对白已迁移到 `story_data/section0_tutorial.json`）
 
 ### M3 可发行 Demo 配套（未完成）
 
@@ -49,7 +61,7 @@
    - `sfx.block_physical`（已由代码生成替代）
    - `sfx.block_magic`（已由代码生成替代）
    - `sfx.ui_next`（已由代码生成替代）
-   - `portrait.narrator`
+   - `portrait.narrator`（已到位并规范化为 256x256，采用双图拆分+合成回退）
 2. 开始 W3 通用剧情架构（已完成）：
    - `StoryEventRunner` 最小可用版本（仅串行播放对白）
    - `StoryTrigger` 抽出，并替换教学关卡内硬编码触发
@@ -58,8 +70,9 @@
 
 ## 4. 阻塞与风险
 
-- 外部音频资产仍缺：`assets` 下未检出 `*.ogg/*.wav/*.mp3`，BGM 与长音频尚未落地。
+- 外部音频资产已开始落地：`bgm.section_story`、`bgm.section_battle` 已就绪，仍缺 `bgm.section_boss`、`bgm.section_result`。
 - 剧情系统目前偏场景脚本实现，若不尽快抽象为 `StoryTrigger/Runner/Data`，后续章节复制成本会升高。
+- 文本风格统一已完成第一版，后续仍需在更多场景下做实机对比（明亮背景/低亮背景各一轮）。
 
 ## 5. 回归记录
 
@@ -79,7 +92,7 @@
 
 ## 6. 下次会话入口
 
-- 优先处理：BGM/长音频资源接入 + 生成式 SFX 听感参数调优。
+- 优先处理：文本风格统一（中文字体 + 主题/shader）并行推进 BGM 资源补齐。
 - 完成后同步更新：
   - `DEMO_RELEASE_PLAN.md` 的“当前现状”
   - `docs/integration_board.md` 的素材状态

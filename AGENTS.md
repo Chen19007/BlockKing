@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -16,6 +16,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. 涉及素材接入时，按 `asset_id + 文件路径 + 状态` 回写到 `docs/integration_board.md`。
 4. 涉及阶段推进时，同步更新 `PROGRESS.md`，确保可跨会话连续推进。
 5. 若用户指令与长期计划冲突，以用户当前指令优先，但在回复中提示影响范围。
+6. 涉及素材版权/署名时，仅维护 `docs/ATTRIBUTION.md` 这一处；其他文档只写“见 `docs/ATTRIBUTION.md`”，不重复正文。
+
+## 文档职责划分（长期固定）
+
+- `AGENTS.md`：协作规则、流程约束、文档边界定义；尽量稳定，低频改动。
+- `DEMO_RELEASE_PLAN.md`：目标、里程碑、排期与验收口径；不记录逐条实现细节。
+- `PROGRESS.md`：本周完成、阻塞、回归记录、下次入口；作为“事实进展日志”。
+- `docs/integration_board.md`：素材与资源位协作看板（`asset_id/路径/状态/分工`）；不展开实现过程。
+- `docs/asset_contracts.yaml`：资产契约与机器可读字段（`asset_id/target_path/spec/status`）。
+- `docs/ATTRIBUTION.md`：署名与版权要求唯一来源；其他文档仅引用。
+
+### 边界规则（避免重复）
+
+1. 进展类信息只写 `PROGRESS.md`，计划文档仅保留摘要并引用。
+2. 素材状态只在 `docs/integration_board.md` 与 `docs/asset_contracts.yaml` 维护。
+3. 署名正文只在 `docs/ATTRIBUTION.md` 维护。
 
 ## Project Overview
 

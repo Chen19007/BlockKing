@@ -44,6 +44,17 @@ func get_audio_stream(asset_id: String) -> AudioStream:
 	return audio_stream
 
 
+func get_font(asset_id: String) -> Font:
+	var asset_path: String = get_asset_path(asset_id)
+	if asset_path == "":
+		push_warning("[AssetRegistry] font missing asset_id=%s" % asset_id)
+		return null
+	var font_resource := load(asset_path) as Font
+	if font_resource == null:
+		push_warning("[AssetRegistry] font load failed asset_id=%s path=%s" % [asset_id, asset_path])
+	return font_resource
+
+
 func has_asset(asset_id: String) -> bool:
 	return get_asset_path(asset_id) != ""
 
