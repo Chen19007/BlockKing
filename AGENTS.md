@@ -116,6 +116,12 @@ Run before committing:
 # Lint (enforces naming, line length, etc.)
 gdlint "D:/project/godot/blockking"
 
+# LSP diagnostics (required for changed files)
+# Use godot-lsp diagnostics on every modified GDScript file and clear all severity=1 errors.
+# Example URIs:
+# file:///D:/project/godot/blockking/player/Player.gd
+# file:///D:/project/godot/blockking/system/ProceduralSFX.gd
+
 # Format check
 gdformat --check "D:/project/godot/blockking"
 

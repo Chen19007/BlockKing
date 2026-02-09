@@ -31,6 +31,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _is_story_playing():
+		return
 	position += direction * speed * delta
 	_elapsed += delta
 	if _elapsed >= lifetime_sec:
@@ -81,3 +83,12 @@ func _update_projectile_visual() -> void:
 
 func get_attack_direction() -> Vector2:
 	return direction
+
+
+func _is_story_playing() -> bool:
+	var runner: Node = get_node_or_null("/root/StoryEventRunner")
+	if not runner:
+		return false
+	if not runner.has_method("is_story_playing"):
+		return false
+	return bool(runner.call("is_story_playing"))

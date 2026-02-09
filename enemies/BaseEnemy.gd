@@ -5,6 +5,7 @@ enum EnemyState { IDLE, WALK, ATTACK, HURT, DEAD }
 
 const AttackTypeClass = preload("res://system/AttackType.gd")
 const CollisionLayersClass = preload("res://system/CollisionLayers.gd")
+const DifficultyManagerClass = preload("res://system/DifficultyManager.gd")
 
 @export var move_speed: float = 120.0
 @export var melee_range: float = 40.0
@@ -30,6 +31,8 @@ var _state_elapsed: float = 0.0
 var _facing_dir: float = 1.0
 var _melee_hit_box_origin: Vector2 = Vector2.ZERO
 var _attack_cooldown_remaining: float = 0.0
+var _effective_attack_cooldown: float = 1.2
+var _story_paused: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -48,6 +51,7 @@ var _attack_cooldown_remaining: float = 0.0
 func _ready() -> void:
 	add_to_group("enemy")
 	_current_health = max(1, max_health)
+	_effective_attack_cooldown = DifficultyManagerClass.get_enemy_attack_cooldown(attack_cooldown)
 	if melee_hit_box:
 		melee_hit_box.attack_type = attack_type
 		melee_hit_box.hit_reason = "melee"
@@ -70,6 +74,21 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _is_story_playing():
+		if not _story_paused:
+			_story_paused = true
+			if animation_player:
+				animation_player.speed_scale = 0.0
+			anim_disable_melee_hitbox()
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	if _story_paused:
+		_story_paused = false
+		if animation_player:
+			animation_player.speed_scale = 1.0
+
 	_update_state_timer(delta)
 	_attack_cooldown_remaining = maxf(0.0, _attack_cooldown_remaining - delta)
 
@@ -225,7 +244,7 @@ func _start_attack_animation() -> void:
 		return
 	if not _has_animation(attack_animation_name):
 		return
-	_attack_cooldown_remaining = attack_cooldown
+	_attack_cooldown_remaining = _effective_attack_cooldown
 	_transition_enemy_state(EnemyState.ATTACK)
 
 
@@ -384,3 +403,12 @@ func _ray_hits_player(ray: RayCast2D, player: Player) -> bool:
 		return true
 	var collider_node := collider as Node
 	return collider_node and collider_node.owner == player
+
+
+func _is_story_playing() -> bool:
+	var runner: Node = get_node_or_null("/root/StoryEventRunner")
+	if not runner:
+		return false
+	if not runner.has_method("is_story_playing"):
+		return false
+	return bool(runner.call("is_story_playing"))

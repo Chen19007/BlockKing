@@ -23,6 +23,8 @@ config/features=PackedStringArray("4.6")
 NodeReadyManager="*res://system/NodeReadyManager.gd"
 AssetRegistry="*res://system/AssetRegistry.gd"
 StoryEventRunner="*res://system/StoryEventRunner.gd"
+DifficultyManager="*res://system/DifficultyManager.gd"
+ProceduralSFXService="*res://system/ProceduralSFX.gd"
 
 [display]
 

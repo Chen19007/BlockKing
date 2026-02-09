@@ -36,7 +36,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed(advance_action):
 		_advance_line()
-		get_tree().set_input_as_handled()
+		get_viewport().set_input_as_handled()
 
 
 func _advance_line() -> void:
@@ -88,3 +88,7 @@ func _lock_player_input(locked: bool) -> void:
 	var player := get_tree().get_first_node_in_group("player") as Player
 	if player:
 		player.set_story_input_locked(locked)
+
+
+func is_story_playing() -> bool:
+	return _is_playing

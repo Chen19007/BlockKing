@@ -1,6 +1,7 @@
 extends Node
 
 const GameFlowConfigClass = preload("res://system/GameFlowConfig.gd")
+const DifficultyManagerClass = preload("res://system/DifficultyManager.gd")
 
 var current_section: Node2D = null
 var current_section_id: String = ""
@@ -54,6 +55,7 @@ func load_section(section_id: String) -> void:
 
 	NodeReadyManager.reset_all()
 	unload_section()
+	DifficultyManagerClass.apply_section_preset(section_id)
 	var scene_path = GameFlowConfigClass.get_section_path(section_id)
 	var packed_scene := load(scene_path) as PackedScene
 	if not packed_scene:

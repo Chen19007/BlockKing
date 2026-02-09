@@ -10,6 +10,10 @@
 - 教学关卡已实现触发链：物理教学 -> 魔法教学 -> 解锁传送（`stages/stage0/TutorialSection.gd`）。
 - 对话 UI 已接入主场景并由 `AssetRegistry` 动态取素材（`Main.tscn`、`ui/DialogueUI.gd`）。
 - 已修复：切关后对话框残留显示，`unload_section()` 会统一隐藏 `DialogueUI`（`Main.gd`）。
+- 已接入全局 `ProceduralSFX`（Autoload），短 SFX 支持代码生成与多声部混音（`system/ProceduralSFX.gd`）。
+- 玩家已接入生成式短 SFX 触发：跳跃/落地/挥砍/格挡命中（`player/Player.gd`）。
+- `DialogueUI` 翻页音默认走生成式 click，保留采样流作为回退（`ui/DialogueUI.gd`）。
+- 已接入 `DifficultyManager` 统一冷却配置：教学关提高敌人攻击冷却，非教学关按已选难度配置（`system/DifficultyManager.gd`、`Main.gd`、`enemies/BaseEnemy.gd`）。
 
 ## 2. 里程碑状态
 
@@ -42,9 +46,9 @@
 ## 3. 本周执行清单（2026-02-08 起）
 
 1. 补齐 W1 缺口素材并接入：
-   - `sfx.block_physical`
-   - `sfx.block_magic`
-   - `sfx.ui_next`
+   - `sfx.block_physical`（已由代码生成替代）
+   - `sfx.block_magic`（已由代码生成替代）
+   - `sfx.ui_next`（已由代码生成替代）
    - `portrait.narrator`
 2. 开始 W3 通用剧情架构（已完成）：
    - `StoryEventRunner` 最小可用版本（仅串行播放对白）
@@ -54,7 +58,7 @@
 
 ## 4. 阻塞与风险
 
-- 音频资产仍缺：`assets` 下未检出 `*.ogg/*.wav/*.mp3`，会限制对白音效与战斗反馈落地。
+- 外部音频资产仍缺：`assets` 下未检出 `*.ogg/*.wav/*.mp3`，BGM 与长音频尚未落地。
 - 剧情系统目前偏场景脚本实现，若不尽快抽象为 `StoryTrigger/Runner/Data`，后续章节复制成本会升高。
 
 ## 5. 回归记录
@@ -66,9 +70,16 @@
 - 实际：`Main.unload_section()` 调用 `_hide_dialogue_ui()` 后隐藏成功。
 - 结果：通过。
 
+### 2026-02-09
+
+- 场景：短 SFX 走代码生成（玩家动作 + 对话翻页）。
+- 预期：跳跃/落地/挥砍/格挡与对话翻页可发声，且可并发叠加。
+- 实际：`ProceduralSFX` 作为 Autoload 接入，`Player` 与 `DialogueUI` 已连接触发点。
+- 结果：通过（已完成代码接入，待实机听感调参）。
+
 ## 6. 下次会话入口
 
-- 优先处理：W1 缺口素材接入 + 首次全流程回归记录。
+- 优先处理：BGM/长音频资源接入 + 生成式 SFX 听感参数调优。
 - 完成后同步更新：
   - `DEMO_RELEASE_PLAN.md` 的“当前现状”
   - `docs/integration_board.md` 的素材状态

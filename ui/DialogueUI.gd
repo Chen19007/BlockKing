@@ -4,6 +4,9 @@ extends CanvasLayer
 @onready var dialog_box: TextureRect = $DialogBox
 @onready var dialog_text: Label = $DialogBox/DialogText
 @onready var ui_audio: AudioStreamPlayer = $UIAudio
+@onready var procedural_sfx: Node = (
+	get_node_or_null("/root/ProceduralSFXService") as Node
+)
 
 
 func _ready() -> void:
@@ -14,7 +17,9 @@ func _ready() -> void:
 func show_dialogue(text: String) -> void:
 	visible = true
 	dialog_text.text = text
-	if ui_audio and ui_audio.stream:
+	if procedural_sfx:
+		procedural_sfx.play_click(0.55)
+	elif ui_audio and ui_audio.stream:
 		ui_audio.play()
 
 

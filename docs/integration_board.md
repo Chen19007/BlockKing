@@ -1,7 +1,11 @@
 # BlockKing 协作集成看板
 
-更新时间：2026-02-08  
+更新时间：2026-02-09  
 协作方式：你负责素材采购与处理，我负责代码接入与验证。
+
+## 当前协作约定（2026-02-09 起）
+- 短 SFX（点击/挥砍/命中/跳跃/落地）默认用代码生成，不再阻塞素材采购。
+- BGM 与长音频继续走外部资源文件并按资产位接入。
 
 ## 状态定义
 - `todo`：未开始
@@ -24,9 +28,9 @@
 | `ui.hud_guard_magic` | W1 | ready | 已放置并规范到 `48x48` |
 | `vfx.block_physical_spark` | W1 | integrated | 已切为 4 帧并接入格挡触发（12fps） |
 | `vfx.block_magic_shield` | W1 | integrated | 临时 4 帧接入格挡触发（12fps，后续可补到 6-10 帧） |
-| `sfx.block_physical` | W1 | todo | 物理格挡音效 |
-| `sfx.block_magic` | W1 | todo | 魔法格挡音效 |
-| `sfx.ui_next` | W1 | todo | 对话翻页音 |
+| `sfx.block_physical` | W1 | integrated | 已由 `ProceduralSFX` 代码生成（可选采样替换） |
+| `sfx.block_magic` | W1 | integrated | 已由 `ProceduralSFX` 代码生成（可选采样替换） |
+| `sfx.ui_next` | W1 | integrated | 已由 `ProceduralSFX` 代码生成（可选采样替换） |
 | `portrait.narrator` | W1 | todo | 旁白头像 |
 
 ## 素材落地路径速查（不用看 yaml）
@@ -40,9 +44,9 @@
 | `ui.hud_guard_magic` | `assets/UI/hud_guard_magic.png` |
 | `vfx.block_physical_spark` | `assets/VFX/block_physical_spark/` |
 | `vfx.block_magic_shield` | `assets/VFX/block_magic_shield/` |
-| `sfx.block_physical` | `assets/Audio/SFX/block_physical.ogg` |
-| `sfx.block_magic` | `assets/Audio/SFX/block_magic.ogg` |
-| `sfx.ui_next` | `assets/Audio/SFX/ui_next.ogg` |
+| `sfx.block_physical` | `system/ProceduralSFX.gd`（默认）或 `assets/Audio/SFX/block_physical.ogg`（可选） |
+| `sfx.block_magic` | `system/ProceduralSFX.gd`（默认）或 `assets/Audio/SFX/block_magic.ogg`（可选） |
+| `sfx.ui_next` | `system/ProceduralSFX.gd`（默认）或 `assets/Audio/SFX/ui_next.ogg`（可选） |
 | `portrait.narrator` | `assets/Story/portrait_narrator.png` |
 
 ## 内部有效像素尺寸标准（用于你处理素材）

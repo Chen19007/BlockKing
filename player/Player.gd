@@ -46,6 +46,7 @@ var _debug_force_block_physical: int = -1
 var _debug_force_block_magic: int = -1
 var _facing_dir: float = 1.0
 var _attack_hit_box_origin: Vector2 = Vector2.ZERO
+var _was_on_floor: bool = false
 
 var _player_state: PlayerState = PlayerState.IDLE
 var _current_visual_animation: StringName = &""
@@ -61,6 +62,9 @@ var _last_blocking_magic: bool = false
 @onready var attack_hit_box: HitBox = $HitBox
 @onready var attack_hit_shape: CollisionShape2D = $HitBox/CollisionShape2D
 @onready var camera: Camera2D = $Camera2D
+@onready var procedural_sfx: Node = (
+	get_node_or_null("/root/ProceduralSFXService") as Node
+)
 
 
 func _ready() -> void:
@@ -85,6 +89,7 @@ func _ready() -> void:
 	_play_animation(idle_animation_name)
 	NodeReadyManager.notify_node_ready("Player", self)
 	_last_logged_position = global_position
+	_was_on_floor = is_on_floor()
 
 
 func _physics_process(delta: float) -> void:
@@ -100,6 +105,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		if _can_accept_action_input() and Input.is_action_just_pressed("jump"):
 			velocity.y = jump_velocity
+			_play_jump_sfx()
 
 	if _can_accept_action_input() and Input.is_action_just_pressed("attack"):
 		_start_attack()
@@ -127,6 +133,7 @@ func _physics_process(delta: float) -> void:
 	_update_state_machine(input_dir)
 
 	move_and_slide()
+	_play_land_sfx_if_needed()
 
 	#if global_position.y > fall_respawn_y:
 	#request_respawn("fall")
@@ -227,7 +234,7 @@ func _handle_e2e_shortcuts(event: InputEvent) -> bool:
 		KEY_F11:
 			_teleport_to_respawn()
 
-	get_tree().set_input_as_handled()
+	get_viewport().set_input_as_handled()
 	return true
 
 
@@ -459,6 +466,7 @@ func _update_block_state() -> void:
 
 func _start_attack() -> void:
 	_transition_player_state(PlayerState.ATTACK)
+	_play_attack_swing_sfx()
 	print("[State] state -> ATTACK")
 
 
@@ -513,6 +521,33 @@ func _spawn_block_vfx(attack_type_value: int, source_direction: Vector2) -> void
 
 	var effect_position: Vector2 = global_position + effect_direction * BLOCK_VFX_OFFSET
 	vfx.play_once(effect_type, effect_position, _facing_dir)
+	_play_block_sfx(attack_type_value)
+
+
+func _play_jump_sfx() -> void:
+	if procedural_sfx:
+		procedural_sfx.play_jump(0.72)
+
+
+func _play_attack_swing_sfx() -> void:
+	if procedural_sfx:
+		procedural_sfx.play_swing(0.80)
+
+
+func _play_block_sfx(attack_type_value: int) -> void:
+	if not procedural_sfx:
+		return
+	if attack_type_value == AttackTypeClass.Type.MAGIC:
+		procedural_sfx.play_hit(0.66)
+		return
+	procedural_sfx.play_hit(0.82)
+
+
+func _play_land_sfx_if_needed() -> void:
+	var now_on_floor: bool = is_on_floor()
+	if not _was_on_floor and now_on_floor and procedural_sfx:
+		procedural_sfx.play_land(0.76)
+	_was_on_floor = now_on_floor
 
 
 func _apply_attack_hitbox_transform() -> void:
