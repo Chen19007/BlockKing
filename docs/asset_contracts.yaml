@@ -50,7 +50,7 @@ assets:
     target_path: "assets/UI/hud_hp_bar.png"
     placeholder_path: "assets/Placeholders/ui_hud_hp_bar.png"
     due: "W1"
-    status: "ready"
+    status: "integrated"
 
   - asset_id: "ui.hud_hp_fill"
     category: "ui"
@@ -64,7 +64,7 @@ assets:
     target_path: "assets/UI/hud_hp.png"
     placeholder_path: "assets/Placeholders/ui_hud_hp.png"
     due: "W1"
-    status: "ready"
+    status: "integrated"
 
   - asset_id: "ui.hud_guard_physical"
     category: "ui"
@@ -78,7 +78,7 @@ assets:
     target_path: "assets/UI/hud_guard_physical.png"
     placeholder_path: "assets/Placeholders/ui_hud_guard_physical.png"
     due: "W1"
-    status: "ready"
+    status: "integrated"
 
   - asset_id: "ui.hud_guard_magic"
     category: "ui"
@@ -92,7 +92,21 @@ assets:
     target_path: "assets/UI/hud_guard_magic.png"
     placeholder_path: "assets/Placeholders/ui_hud_guard_magic.png"
     due: "W1"
-    status: "ready"
+    status: "integrated"
+
+  - asset_id: "ui.hud_objective_panel"
+    category: "ui"
+    required: true
+    type: "texture"
+    spec:
+      size: "1536x1024 (runtime scaled)"
+      pivot: "center"
+      format: "png"
+      style: "目标提示背景面板"
+    target_path: "assets/UI/hud_objective_panel.png"
+    placeholder_path: "assets/Placeholders/ui_hud_objective_panel.png"
+    due: "W2"
+    status: "integrated"
 
   - asset_id: "vfx.block_physical_spark"
     category: "vfx"
@@ -215,7 +229,10 @@ assets:
     target_path: "assets/Audio/BGM/section_boss.ogg"
     placeholder_path: "assets/Placeholders/bgm_section_boss.ogg"
     due: "W2"
-    status: "todo"
+    status: "integrated"
+    source_file: "D:/project/sucai/Lament of the War - MP3 Preview.mp3"
+    source_version: "bgm-boss-v2026-02-09-01"
+    attribution_ref: "docs/ATTRIBUTION.md"
 
   - asset_id: "bgm.section_result"
     category: "bgm"

@@ -40,14 +40,6 @@
   完成后更新 `ui/DialogueUI.tscn`、`ui/DialogueUI.gd`、`PROGRESS.md`、本看板状态。
 
 ## 你下一步要找的素材（按此清单）
-- `asset_id`: `bgm.section_battle`
-  `路径`: `assets/Audio/BGM/section_battle.ogg`
-  `规格`: `ogg`、循环、建议 `>= 60s`、峰值不高于 `-1 dB`
-  `用途`: 普通战斗段落替换 `bgm.section_story`
-- `asset_id`: `bgm.section_boss`
-  `路径`: `assets/Audio/BGM/section_boss.ogg`
-  `规格`: `ogg`、循环、建议 `>= 60s`、峰值不高于 `-1 dB`
-  `用途`: Boss 段落音乐
 - `asset_id`: `bgm.section_result`
   `路径`: `assets/Audio/BGM/section_result.ogg`
   `规格`: `ogg`、循环可选、建议 `30s~90s`、峰值不高于 `-1 dB`
@@ -68,10 +60,11 @@
 |---|---|---|---|
 | `ui.dialog_box` | W1 | integrated | 已检测到 `assets/UI/dialog_box.png`，尺寸 `683x233` |
 | `ui.dialog_name_plate` | W1 | ready | 已放置并规范到 `256x64` |
-| `ui.hud_hp_bar` | W1 | ready | 外框层，已规范到 `256x48` |
-| `ui.hud_hp_fill` | W1 | ready | 填充层，使用 `assets/UI/hud_hp.png`，已规范到 `256x48` |
-| `ui.hud_guard_physical` | W1 | ready | 已放置并规范到 `48x48` |
-| `ui.hud_guard_magic` | W1 | ready | 已放置并规范到 `48x48` |
+| `ui.hud_hp_bar` | W1 | integrated | 已接入 `HUD`（外框层，`256x48`） |
+| `ui.hud_hp_fill` | W1 | integrated | 已接入 `HUD`（填充层，`256x48`） |
+| `ui.hud_guard_physical` | W1 | integrated | 已接入 `HUD`（格挡状态图标，`48x48`） |
+| `ui.hud_guard_magic` | W1 | integrated | 已接入 `HUD`（格挡状态图标，`48x48`） |
+| `ui.hud_objective_panel` | W2 | integrated | 已接入 `HUD`，使用 `assets/UI/hud_objective_panel.png` 运行时缩放 |
 | `vfx.block_physical_spark` | W1 | integrated | 已切为 4 帧并接入格挡触发（12fps） |
 | `vfx.block_magic_shield` | W1 | integrated | 临时 4 帧接入格挡触发（12fps，后续可补到 6-10 帧） |
 | `sfx.block_physical` | W1 | integrated | 已由 `ProceduralSFX` 代码生成（可选采样替换） |
@@ -82,7 +75,7 @@
 | `portrait.narrator_frame` | W1 | ready | 头像外框，已规范为 `256x256` |
 | `portrait.narrator_character` | W1 | ready | 头像角色主体，已规范为 `256x256` |
 | `bgm.section_battle` | W2 | integrated | 已由 `D:/download/cute_bass.mp3` 转码接入，版本 `bgm-battle-v2026-02-09-01` |
-| `bgm.section_boss` | W2 | todo | 路由已就绪，资源到位后自动切换 |
+| `bgm.section_boss` | W2 | integrated | 已由 `Lament of the War - MP3 Preview.mp3` 转码接入，署名见 `docs/ATTRIBUTION.md` |
 | `bgm.section_result` | W2 | todo | 路由已就绪，资源到位后自动切换 |
 | `font.ui_serif_cn` | W2 | integrated | 已接入 `assets/Fonts/ui_serif_cn.otf`，文本主题自动加载生效 |
 | `font.ui_sans_cn` | W2 | todo | 可选，待字体文件到位后接入高密度 UI 文案 |
@@ -96,6 +89,7 @@
 | `ui.hud_hp_fill` | `assets/UI/hud_hp.png` |
 | `ui.hud_guard_physical` | `assets/UI/hud_guard_physical.png` |
 | `ui.hud_guard_magic` | `assets/UI/hud_guard_magic.png` |
+| `ui.hud_objective_panel` | `assets/UI/hud_objective_panel.png` |
 | `vfx.block_physical_spark` | `assets/VFX/block_physical_spark/` |
 | `vfx.block_magic_shield` | `assets/VFX/block_magic_shield/` |
 | `sfx.block_physical` | `system/ProceduralSFX.gd`（默认）或 `assets/Audio/SFX/block_physical.ogg`（可选） |

@@ -22,3 +22,9 @@
 - 版权说明：`Copyright/Attribution Notice: just include my name, Alex McCulloch.`
 - 附加要求：在游戏官网放置链接  
   `https://musiccompositionhacks.blogspot.com/2020/07/how-to-improvise-music-in-real-time.html`
+
+### bgm.section_boss
+- 资源路径：`assets/Audio/BGM/section_boss.ogg`
+- 源文件：`D:/project/sucai/Lament of the War - MP3 Preview.mp3`
+- 版本：`bgm-boss-v2026-02-09-01`
+- 署名：`Cethiel`
