@@ -64,7 +64,7 @@
 | `ui.hud_hp_fill` | W1 | integrated | 已接入 `HUD`（填充层，`256x48`） |
 | `ui.hud_guard_physical` | W1 | integrated | 已接入 `HUD`（格挡状态图标，`48x48`） |
 | `ui.hud_guard_magic` | W1 | integrated | 已接入 `HUD`（格挡状态图标，`48x48`） |
-| `ui.hud_objective_panel` | W2 | integrated | 已接入 `HUD`，使用 `assets/UI/hud_objective_panel.png` 运行时缩放 |
+| `ui.hud_objective_panel` | W2 | integrated | 已接入 `HUD`，当前默认隐藏（简洁模式） |
 | `vfx.block_physical_spark` | W1 | integrated | 已切为 4 帧并接入格挡触发（12fps） |
 | `vfx.block_magic_shield` | W1 | integrated | 临时 4 帧接入格挡触发（12fps，后续可补到 6-10 帧） |
 | `sfx.block_physical` | W1 | integrated | 已由 `ProceduralSFX` 代码生成（可选采样替换） |

@@ -26,8 +26,8 @@
 - 第一章剧情数据化已推进：`section1_1`、`section1_2` 新增进场触发器并改为读取 `story_data/*.json`（`stages/stage1/Section.gd`、`story_data/section1_1.json`、`story_data/section1_2.json`）。
 - 战斗 BGM 已落地：`D:/download/cute_bass.mp3` 转码为 `assets/Audio/BGM/section_battle.ogg` 并可被 `Main.gd` 路由命中，版本 `bgm-battle-v2026-02-09-01`。
 - 音频署名信息已统一收敛到 `docs/ATTRIBUTION.md`（唯一来源）。
-- HUD 最小版已接入：`HP 条 + 物理/魔法格挡状态 + 当前目标提示`（`ui/HUD.tscn`、`ui/HUD.gd`、`Main.tscn`）。
-- `ui.hud_objective_panel` 已接入：使用 `assets/UI/hud_objective_panel.png` 作为目标提示背景并按 HUD 区域缩放显示。
+- HUD 最小版已接入：`HP 条 + 物理/魔法格挡状态` 常驻显示（`ui/HUD.tscn`、`ui/HUD.gd`、`Main.tscn`）。
+- `ui.hud_objective_panel` 已接入并完成素材适配（`300x156`），当前默认隐藏（简洁模式，后续可折叠展开）。
 - Boss BGM 已落地：`D:/project/sucai/Lament of the War - MP3 Preview.mp3` 转码为 `assets/Audio/BGM/section_boss.ogg`，版本 `bgm-boss-v2026-02-09-01`，署名见 `docs/ATTRIBUTION.md`。
 
 ## 2. 里程碑状态
@@ -55,7 +55,7 @@
 ### M3 可发行 Demo 配套（未完成）
 
 - [ ] 主菜单与完整流程入口
-- [x] HUD（HP/格挡状态/目标，目标提示当前为文本版）
+- [x] HUD（HP/格挡状态；目标提示面板已接入但默认隐藏）
 - [ ] Demo 结算页与回环
 
 ## 3. 本周执行清单（2026-02-08 起）
