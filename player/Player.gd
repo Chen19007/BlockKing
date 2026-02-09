@@ -38,6 +38,8 @@ var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var is_blocking_physical: bool = false
 var is_blocking_magic: bool = false
+
+var _story_input_locked: bool = false
 var _respawn_queued: bool = false
 var _e2e_move_remaining: float = 0.0
 var _debug_force_block_physical: int = -1
@@ -462,10 +464,15 @@ func _start_attack() -> void:
 
 func _can_accept_action_input() -> bool:
 	return (
-		_player_state != PlayerState.ATTACK
+		not _story_input_locked
+		and _player_state != PlayerState.ATTACK
 		and _player_state != PlayerState.HURT
 		and _player_state != PlayerState.DEAD
 	)
+
+
+func set_story_input_locked(locked: bool) -> void:
+	_story_input_locked = locked
 
 
 func _apply_camera_horizon() -> void:

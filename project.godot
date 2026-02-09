@@ -22,6 +22,7 @@ config/features=PackedStringArray("4.6")
 
 NodeReadyManager="*res://system/NodeReadyManager.gd"
 AssetRegistry="*res://system/AssetRegistry.gd"
+StoryEventRunner="*res://system/StoryEventRunner.gd"
 
 [display]
 

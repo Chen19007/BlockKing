@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://stages/stage0/TutorialSection.gd" id="1"]
 [ext_resource type="PackedScene" path="res://buildings/Checkpoint.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://buildings/Transport.tscn" id="3"]
+[ext_resource type="Script" path="res://system/StoryTrigger.gd" id="4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(2200, 40)
@@ -36,21 +37,27 @@ position = Vector2(620, 336)
 position = Vector2(1120, 336)
 
 [node name="TriggerPhysical" type="Area2D" parent="."]
+script = ExtResource("4")
 position = Vector2(430, 300)
 monitoring = true
 monitorable = true
 collision_layer = 1
 collision_mask = 2
+trigger_id = &"physical_tutorial"
+dialogue_lines = ["远程物理教学：按 J 进行物理格挡，挡住箭矢后用 L 击败敌人。"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerPhysical"]
 shape = SubResource("RectangleShape2D_2")
 
 [node name="TriggerMagic" type="Area2D" parent="."]
+script = ExtResource("4")
 position = Vector2(920, 300)
 monitoring = true
 monitorable = true
 collision_layer = 1
 collision_mask = 2
+trigger_id = &"magic_tutorial"
+dialogue_lines = ["远程魔法教学：按 K 进行魔法格挡，挡住法术后用 L 击败敌人。"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerMagic"]
 shape = SubResource("RectangleShape2D_3")

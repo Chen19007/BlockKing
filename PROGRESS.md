@@ -1,6 +1,6 @@
 # BlockKing 进度看板（长期协作版）
 
-更新时间：2026-02-08
+更新时间：2026-02-09
 
 ## 1. 当前实现快照（基于仓库实际）
 
@@ -29,8 +29,8 @@
 
 - [x] 教学关卡 `section0_tutorial`
 - [x] `DialogueUI` 基础显示与素材注入
-- [ ] `StoryTrigger` 通用节点
-- [ ] `StoryEventRunner`（Autoload）
+- [x] `StoryTrigger` 通用节点
+- [x] `StoryEventRunner`（Autoload）
 - [ ] `StoryData`（JSON/Resource 数据驱动）
 
 ### M3 可发行 Demo 配套（未完成）
@@ -46,9 +46,9 @@
    - `sfx.block_magic`
    - `sfx.ui_next`
    - `portrait.narrator`
-2. 开始 W3 通用剧情架构：
-   - 先做 `StoryEventRunner` 最小可用版本（仅串行播放对白）
-   - 再抽出 `StoryTrigger`，替换教学关卡内硬编码触发
+2. 开始 W3 通用剧情架构（已完成）：
+   - `StoryEventRunner` 最小可用版本（仅串行播放对白）
+   - `StoryTrigger` 抽出，并替换教学关卡内硬编码触发
 3. 建立每周固定回归：
    - 从入口到通关/切关全流程跑一轮，记录到本文件“回归记录”。
 
@@ -68,7 +68,7 @@
 
 ## 6. 下次会话入口
 
-- 优先处理：`StoryEventRunner` 最小实现 + 接入 `section0_tutorial`。
+- 优先处理：W1 缺口素材接入 + 首次全流程回归记录。
 - 完成后同步更新：
   - `DEMO_RELEASE_PLAN.md` 的“当前现状”
   - `docs/integration_board.md` 的素材状态
