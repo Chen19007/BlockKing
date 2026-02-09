@@ -1,4 +1,3 @@
-class_name StoryEventRunner
 extends Node
 
 signal story_started
