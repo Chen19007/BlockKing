@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 长期计划主文档：`DEMO_RELEASE_PLAN.md`（周目标/里程碑/验收口径）。
 - 执行状态看板：`docs/integration_board.md`（`todo`/`in_review`/`ready`/`integrated`）。
 - 进度日志：`PROGRESS.md`（本周完成、阻塞项、下周待办）。
+- 内容设计文档：`DESIGN.md`（玩法/美术/关卡设计）与 `docs/story_design.md`（剧情设计）。
+- 角色素材映射数据：`docs/roles.csv`（角色设定标签）、`docs/materials.csv`（素材索引）、`docs/role_materials.csv`（角色-素材映射与 HSV 偏移）。
 
 ### 默认执行规则
 
@@ -17,6 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. 涉及阶段推进时，同步更新 `PROGRESS.md`，确保可跨会话连续推进。
 5. 若用户指令与长期计划冲突，以用户当前指令优先，但在回复中提示影响范围。
 6. 涉及素材版权/署名时，仅维护 `docs/ATTRIBUTION.md` 这一处；其他文档只写“见 `docs/ATTRIBUTION.md`”，不重复正文。
+7. 涉及内容变更时，优先更新 `DESIGN.md`；若为剧情变更，同步更新 `docs/story_design.md`。
 
 ## 文档职责划分（长期固定）
 
@@ -26,12 +29,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `docs/integration_board.md`：素材与资源位协作看板（`asset_id/路径/状态/分工`）；不展开实现过程。
 - `docs/asset_contracts.yaml`：资产契约与机器可读字段（`asset_id/target_path/spec/status`）。
 - `docs/ATTRIBUTION.md`：署名与版权要求唯一来源；其他文档仅引用。
+- `DESIGN.md`：玩法/美术/关卡等综合设计基线；内容改动需先在此落地或同步。
+- `docs/story_design.md`：剧情设计唯一主文档（章节目标、关键事件、钩子）；剧情更新优先维护此处。
+- `docs/roles.csv`：角色主数据（阵营、攻击类型、战斗定位、可格挡、冲突立场、角色设定）。
+- `docs/materials.csv`：素材主数据（源文件与资源路径索引）。
+- `docs/role_materials.csv`：角色到素材映射（`role_id/material_id`）与 `h_shift/s_shift/v_shift` 参数。
 
 ### 边界规则（避免重复）
 
 1. 进展类信息只写 `PROGRESS.md`，计划文档仅保留摘要并引用。
 2. 素材状态只在 `docs/integration_board.md` 与 `docs/asset_contracts.yaml` 维护。
 3. 署名正文只在 `docs/ATTRIBUTION.md` 维护。
+4. 内容与剧情不混写：综合设计放 `DESIGN.md`，剧情细化放 `docs/story_design.md`，两者保持链接与同步。
+5. 角色与素材标签只维护在 `docs/roles.csv`、`docs/materials.csv`、`docs/role_materials.csv`，不再维护 `docs/asset_tags.csv`。
+6. 解析 `docs/roles.csv` 时，忽略 `role_id` 以 `__ENUM__` 开头的模板行（仅用于补全，不参与统计与决策）。
 
 ## Project Overview
 
