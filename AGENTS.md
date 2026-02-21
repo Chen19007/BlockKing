@@ -32,7 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `DESIGN.md`：玩法/美术/关卡等综合设计基线；内容改动需先在此落地或同步。
 - `docs/story_design.md`：剧情设计唯一主文档（章节目标、关键事件、钩子）；剧情更新优先维护此处。
 - `docs/roles.csv`：角色主数据（阵营、攻击类型、战斗定位、可格挡、冲突立场、角色设定）。
-- `docs/materials.csv`：素材主数据（源文件与资源路径索引）。
+- `docs/materials.csv`：素材主数据（源文件、资源路径索引、攻击类型默认标签与动作级覆盖标签）。
 - `docs/role_materials.csv`：角色到素材映射（`role_id/material_id`）与 `h_shift/s_shift/v_shift` 参数。
 
 ### 边界规则（避免重复）
@@ -203,3 +203,13 @@ See `AGENTS.md` for detailed anti-patterns and refactoring examples.
 Enemies with `Block` animation: `Armored Orc`, `Knight Templar`, `Knight`, `Orc rider`, `Skeleton`.
 
 Enemies with magic/effect animations: `Priest`, `Wizard`.
+
+## Material Attack-Type Tagging Rules
+
+- 不允许仅根据图片帧视觉效果判断攻击类型（物理/魔法）。
+- 标注 `docs/materials.csv` 的攻击类型字段时，只能使用可追溯依据：
+  - 动画标签或目录命名语义（如 `Attack_effect`、`Attack_with effect`）。
+  - 已提交代码中的伤害类型/投射物类型配置。
+  - 用户或设计文档的明确确认。
+- 证据不足时必须保持 `unknown`，禁止猜测性填充。
+- 动作级差异写入 `attack_action_type_overrides`（示例：`Attack01:物理;Attack02:物理;Attack:魔法`）。
