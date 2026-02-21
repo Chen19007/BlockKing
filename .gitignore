@@ -24,3 +24,6 @@ Desktop.ini
 *.tmp
 *.bak
 *~
+
+# Godot CSV translation import artifacts under docs
+docs/*.translation
